@@ -1,0 +1,46 @@
+# Node modules
+node_modules/
+.pnp/
+.pnp.cjs
+
+# Build artifacts
+dist/
+build/
+out/
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# IDE and OS specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# NPM package lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Runtime data
+*.sqlite
+*.sqlite3
+/tmp/
+
+# Uploads
+/uploads/
