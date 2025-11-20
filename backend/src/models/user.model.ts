@@ -6,6 +6,7 @@ export interface IUser extends Document {
             name: string,
             email: string,
             password: string,
+            googleId: string,
             recentWishlist: mongoose.Types.ObjectId[];
             createdAt: Date,
             updatedAt: Date,
@@ -29,7 +30,10 @@ const userSchema = new Schema<IUser>(
 
                         recentWishlist: [{
                                     type: Schema.Types.ObjectId, ref: "Product"
-                        }]
+                        }],
+                        googleId: {
+                                    type: String
+                        }
             },
             { timestamps: true }
 )
