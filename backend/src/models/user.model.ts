@@ -1,54 +1,50 @@
-import mongoose, { Model, Schema, Document } from "mongoose";
-import bcrypt from "bcrypt";
+import mongoose, { Document, Schema } from "mongoose";
 
+export interface Address {
+            street?: string;
+            city?: string;
+            state?: string;
+            country?: string;
+            pincode?: string;
+            phone?: string;
+}
 
 export interface IUser extends Document {
-            name: string,
-            email: string,
-            password: string,
-            googleId: string,
-            recentWishlist: mongoose.Types.ObjectId[];
-            createdAt: Date,
-            updatedAt: Date,
+            name: string;
+            email: string;
+            password: string;
+            role: "user" | "admin";
+            addresses?: Address[];
+            wishlist?: mongoose.Types.ObjectId[];
+            lastLogin?: Date;
 }
 
 const userSchema = new Schema<IUser>(
             {
-                        name: { type: String, required: true, lowercase: true },
-                        email: {
-                                    type: String,
-                                    required: true,
-                                    unique: true,
-                                    lowercase: true,
-                                    match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
-                        },
-                        password: {
-                                    type: String,
-                                    required: true,
-                                    select: false
-                        },
+                        name: { type: String, required: true },
 
-                        recentWishlist: [{
-                                    type: Schema.Types.ObjectId, ref: "Product"
-                        }],
-                        googleId: {
-                                    type: String
-                        }
+                        email: { type: String, required: true, unique: true },
+
+                        password: { type: String, required: true },
+
+                        role: { type: String, enum: ["user", "admin"], default: "user" },
+
+                        addresses: [
+                                    {
+                                                street: String,
+                                                city: String,
+                                                state: String,
+                                                country: String,
+                                                pincode: String,
+                                                phone: String,
+                                    },
+                        ],
+
+                        wishlist: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+
+                        lastLogin: Date,
             },
             { timestamps: true }
-)
+);
 
-// Hashing password before saving 
-userSchema.pre("save", async function (next) {
-            if (!this.isModified("password")) return next();
-            this.password = await bcrypt.hash(this.password, 10)
-            next();
-});
-
-// Compare password 
-userSchema.methods.comparePassword = async function (password: string) {
-            return await bcrypt.compare(password, this.password);
-}
-
-const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
-export default User;
+export default mongoose.model<IUser>("User", userSchema);

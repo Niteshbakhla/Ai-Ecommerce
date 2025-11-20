@@ -13,6 +13,6 @@ app.use(morgan("dev"));
 
 app.use("/", router);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 export default app
