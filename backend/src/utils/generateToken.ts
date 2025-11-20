@@ -10,6 +10,7 @@ export const generateAccessToken = (id: string, role: string): string => {
 };
 
 export const generateRefreshToken = (id: string, role: string): string => {
+ 
             return jwt.sign({ id, role }, JWT_REFRESH_SECRET as string, {
                         expiresIn: "30d",
             });

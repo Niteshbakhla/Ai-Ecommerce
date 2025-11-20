@@ -1,5 +1,4 @@
 import User, { IUser } from "../models/user.model";
-import bcrypt from "bcrypt";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken";
 
 export const registerUser = async (name: string, email: string, password: string): Promise<IUser> => {
@@ -15,7 +14,7 @@ export const loginUser = async (email: string, password: string) => {
             const user = await User.findOne({ email });
             if (!user) throw new Error("Invalid email or password");
 
-            const match = await bcrypt.compare(password, user.password);
+            const match = await user.comparePassword(password);
             if (!match) throw new Error("Invalid email or password");
 
             const accessToken = generateAccessToken(user._id.toString(), user.role);
@@ -23,7 +22,6 @@ export const loginUser = async (email: string, password: string) => {
 
             user.lastLogin = new Date();
             await user.save();
-
             return { user, accessToken, refreshToken };
 };
 

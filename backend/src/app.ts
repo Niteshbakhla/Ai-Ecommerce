@@ -11,7 +11,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 
-app.use("/", router);
+app.use("/api", router);
 
 app.use(errorHandler);
 
