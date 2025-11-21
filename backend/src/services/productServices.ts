@@ -1,5 +1,7 @@
 import { FilterQuery } from "mongoose";
 import Product, { IProduct } from "../models/product.model"
+import User from "../models/user.model";
+import AppError from "../utils/customError";
 
 
 interface ListQuery {
