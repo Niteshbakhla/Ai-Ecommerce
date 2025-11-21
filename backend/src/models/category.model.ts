@@ -2,8 +2,8 @@ import mongoose, { Schema, Model, Document } from "mongoose";
 
 interface ICategory extends Document {
             name: string;
-            description: string;
-            bannerImage: string
+            description?: string;
+            bannerImage?: string
 }
 
 const categorySchema = new Schema<ICategory>({
