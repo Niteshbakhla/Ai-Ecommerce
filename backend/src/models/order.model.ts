@@ -22,6 +22,7 @@ export interface IOrder extends Document {
             address: IOrderAddress;
             paymentId?: string;
             totalAmount: number;
+            razorpayOrderId: string,
             createdAt: Date;
             updatedAt: Date
 }
@@ -58,8 +59,8 @@ const orderSchema = new mongoose.Schema<IOrder>({
             },
 
             paymentId: String,
-
-            totalAmount: Number,
+            razorpayOrderId: String,
+            totalAmount: { type: Number, required: true },
 
 }, { timestamps: true });
 
