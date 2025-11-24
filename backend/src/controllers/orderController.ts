@@ -23,7 +23,7 @@ export const verifyPaymentController = asyncHandler(
                         res: Response,
                         next: NextFunction
             ) => {
-                        const order = await verifyAndFinalizeOrder(req.user?.id.toString())
+                        const order = await verifyAndFinalizeOrder(req.body)
                         res.status(200).json({ success: true, messaeg: "Payment verified", order });
             }
 )
