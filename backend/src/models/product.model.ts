@@ -12,6 +12,7 @@ export interface IProduct extends Document {
             isFeatured: boolean;
             embeddingVector: number[];
             createdBy: mongoose.Types.ObjectId;
+            searchText: string,
             createdAt: Date;
             updatedAt: Date;
 }
@@ -42,6 +43,7 @@ const productSchema = new Schema<IProduct>(
                         isFeatured: { type: Boolean, default: false },
 
                         embeddingVector: { type: [Number] },
+                        searchText: String,
 
                         createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
             },
