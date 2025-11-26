@@ -4,8 +4,14 @@ import helmet from "helmet";
 import router from "./routes/index";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors({
+            origin: "http://localhost:5173",
+            credentials: true
+}))
 
 app.use(cookieParser())
 app.use(express.json());
