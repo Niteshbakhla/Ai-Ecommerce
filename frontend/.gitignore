@@ -7,12 +7,33 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
 
-# Editor directories and files
+# Build directories
+dist/
+dist-ssr/
+build/
+.out/
+.next/
+out/
+
+# Cache
+.cache/
+.vite/
+.parcel-cache/
+
+# Environment
+*.local
+.env
+.env.*.local
+
+# # Radix UI / Bundler chunks metadata
+*_metadata.json
+*.chunk.js
+*.chunk.css
+
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
