@@ -14,15 +14,19 @@ import { useMutation } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { loginUser } from "../api/auth/authApi";
 import { Link } from "react-router-dom";
+import { setCredentials } from "@/store/slices/authSlices";
+import { useDispatch } from "react-redux";
 
 
 export default function Login() {
             const [email, setEmail] = useState("");
             const [password, setPassword] = useState("");
+            const dispatch = useDispatch();
 
             const mutation = useMutation({
                         mutationFn: loginUser,
-                        onSuccess: () => {
+                        onSuccess: ({ data }) => {
+                                    dispatch(setCredentials({ user: data.user, accessToken: data.accessToken }))
                                     alert("Login successfully! You can login now.");
                         },
                         onError: (err: any) => {

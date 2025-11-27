@@ -120,7 +120,7 @@ export default function Register() {
                                                             </CardContent>
 
                                                             <CardFooter className="flex flex-col gap-3">
-                                                                        <Button className="w-full" disabled={mutation.isPending}>
+                                                                        <Button className="w-full bg-[#291c0e] " disabled={mutation.isPending}>
                                                                                     {mutation.isPending && (
                                                                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                                                                     )}

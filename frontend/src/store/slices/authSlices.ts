@@ -20,10 +20,10 @@ const initialState: AuthState = {
 const authSlice = createSlice({
             name: "auth",
             initialState,
-            reducers: { 
-                        setCredentials: (state, action: PayloadAction<{ user: User; acessToken: string }>) => {
+            reducers: {
+                        setCredentials: (state, action: PayloadAction<{ user: User | null; accessToken: string }>) => {
                                     state.user = action.payload.user;
-                                    state.accessToken = action.payload.acessToken;
+                                    state.accessToken = action.payload.accessToken;
                         },
                         logout: (state) => {
                                     state.user = null;
