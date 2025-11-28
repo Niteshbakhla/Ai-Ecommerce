@@ -3,6 +3,7 @@ import Register from "./pages/Register"
 import Login from "./pages/Login"
 import Layout from "./components/layouts/Layout"
 import Home from "./pages/Home"
+import ProductDetails from "./pages/ProductDetail"
 
 
 
@@ -16,6 +17,8 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+
           </Routes>
         </Layout>
       </BrowserRouter>
