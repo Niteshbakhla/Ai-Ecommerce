@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { createProduct, deleteProduct, listProducts, updateProduct } from "../services/productServices";
 import { asyncHandler } from "../utils/asyncHandler";
+import Category from "../models/category.model";
 import Product from "../models/product.model";
 
 
@@ -10,11 +11,34 @@ export const createProductController = asyncHandler(
                         const data = req.body;
                         const createdBy = req.user?.id;
 
-                        const product = await createProduct(data, createdBy);
+                        // 1) Extract title & description
+                        const textParts = [req.body.title, req.body.description];
 
-                        res.status(201).json({ message: "Product created successfully", product })
+                        // 2) Fetch category name if categoryId exists
+                        if (req.body.category) {
+                                    const category = await Category.findById(req.body.category).select("name");
+                                    if (category) {
+                                                textParts.push(category.name);
+                                    }
+                        }
+
+                        // 3) Build searchText
+                        const searchText = textParts.join(" ").toLowerCase();
+
+                        // 4) Add searchText + createdBy to the product data
+                        const finalData = {
+                                    ...data,
+                                    createdBy,
+                                    searchText,
+                        };
+
+                        // 5) Create product in DB
+                        const product = await createProduct(finalData, createdBy);
+
+                        res.status(201).json({ message: "Product created successfully", product });
             }
-)
+);
+
 
 
 export const getProductController = asyncHandler(

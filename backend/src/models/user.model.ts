@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface Address {
@@ -59,4 +59,7 @@ userSchema.methods.comparePassword = async function (password: string) {
             return await bcrypt.compare(password, this.password);
 }
 
-export default mongoose.model<IUser>("User", userSchema);
+
+const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
+
+export default User;
