@@ -1,7 +1,8 @@
-import { NextFunction, Response } from "express";
+import { Response } from "express";
 import { AuthRequest } from "../middleware/auth";
-import { createProduct, deleteProduct, getProductById, listProducts, updateProduct } from "../services/productServices";
+import { createProduct, deleteProduct, listProducts, updateProduct } from "../services/productServices";
 import { asyncHandler } from "../utils/asyncHandler";
+import Product from "../models/product.model";
 
 
 export const createProductController = asyncHandler(
@@ -38,5 +39,13 @@ export const productUpdateController = asyncHandler(
                         const productData = req.body
                         const product = await updateProduct(productId, productData);
                         res.status(200).json({ success: true, message: "Product updated successfully", product })
+            }
+)
+
+export const getSingleProduct = asyncHandler(
+            async (req: AuthRequest, res: Response) => {
+                        const productId = req.params.id;
+                        const products = await Product.findById(productId);
+                        res.status(200).json({ success: true, products })
             }
 )
