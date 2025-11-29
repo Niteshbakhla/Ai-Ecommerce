@@ -13,9 +13,10 @@ import { Label } from "../components/ui/label";
 import { useMutation } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { loginUser } from "../api/auth/authApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setCredentials } from "@/store/slices/authSlices";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 
 export default function Login() {
@@ -23,14 +24,17 @@ export default function Login() {
             const [password, setPassword] = useState("");
             const dispatch = useDispatch();
 
+            const navigate = useNavigate();
+
             const mutation = useMutation({
                         mutationFn: loginUser,
                         onSuccess: ({ data }) => {
                                     dispatch(setCredentials({ user: data.user, accessToken: data.accessToken }))
-                                    alert("Login successfully! You can login now.");
+                                    toast.success("Login successfully! You can login now.");
+                                    navigate("/")
                         },
                         onError: (err: any) => {
-                                    alert(err.response?.data?.message || "Login failed");
+                                    toast.error(err.response?.data?.message || "Login failed");
                         },
             });
 
