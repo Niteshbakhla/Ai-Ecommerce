@@ -1,9 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getProductById, getSimilarProducts } from "@/services/product.service";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Truck, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { addToCartProduct } from "@/services/cart.services";
+import toast from "react-hot-toast";
 
 export default function ProductDetails() {
             const { id } = useParams();
@@ -24,6 +26,16 @@ export default function ProductDetails() {
                         queryFn: () => getSimilarProducts(id!),
                         enabled: !!id,
             });
+
+            const cartMutation = useMutation({
+                        mutationFn: addToCartProduct,
+                        onSuccess: (data) => {
+                                    toast.success(data.message)
+                        },
+                        onError: (err: any) => {
+                                    toast.error(err.response?.data?.message || "add to cart failed");
+                        },
+            })
 
             if (productLoading) {
                         return (
@@ -78,8 +90,8 @@ export default function ProductDetails() {
                                                                                                                                     key={idx}
                                                                                                                                     onClick={() => setSelectedImage(idx)}
                                                                                                                                     className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImage === idx
-                                                                                                                                                            ? "border-gray-900"
-                                                                                                                                                            : "border-transparent hover:border-gray-300"
+                                                                                                                                                ? "border-gray-900"
+                                                                                                                                                : "border-transparent hover:border-gray-300"
                                                                                                                                                 }`}
                                                                                                                         >
                                                                                                                                     <img
@@ -178,7 +190,7 @@ export default function ProductDetails() {
                                                                                     {/* Action Buttons */}
                                                                                     <div className="flex gap-3 pt-4">
                                                                                                 <Button
-                                                                                                            onClick={() => console.log('Add to cart:', product._id, quantity)}
+                                                                                                            onClick={() => cartMutation.mutate(product._id.toString())}
                                                                                                             disabled={product.stock === 0}
                                                                                                             className="flex-1 bg-gray-900 text-white hover:bg-gray-800 h-12 text-base font-medium"
                                                                                                 >

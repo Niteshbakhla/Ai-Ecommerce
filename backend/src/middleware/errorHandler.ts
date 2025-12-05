@@ -9,7 +9,7 @@ export const errorHandler = (
             next: NextFunction
 ) => {
             const message = err.message || "Internal server error";
-            const statusCode = err.statusCode || 500;
+            const statusCode = err.statusCode || 401;
 
             res.status(statusCode).json({ success: false, message })
 }

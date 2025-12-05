@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../../store/store"
 import { logout } from "@/store/slices/authSlices";
+import { useQuery } from "@tanstack/react-query";
+import { getUserCarts } from "@/services/cart.services";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-            const [cartCount, setCartCount] = useState(3);
 
             // Correct TS-safe selector
             const user = useSelector((state: RootState) => state.auth.user);
+            const location = useLocation();
 
             const dispatch = useDispatch();
 
@@ -20,14 +22,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         dispatch(logout());   // 👈 correct Redux logout
                         navigate("/login");
             };
+            const getCurrentPage = (pathname: string): "/" | "login" | "register" | undefined => {
+                        if (pathname === "/") return "/";
+                        if (pathname.includes("/login")) return "login";
+                        if (pathname.includes("/register")) return "register";
+                        return undefined;
+            };
+
+            const { data, isLoading } = useQuery({
+                        queryKey: ["cart"],
+                        queryFn: getUserCarts,
+            });
 
             return (
                         <>
                                     <Navbar
                                                 user={user}
-                                                cartCount={cartCount}
+                                                cartCount={isLoading ? 0 : data?.items?.length ?? 0}
+
+                                                currentPage={getCurrentPage(location.pathname)}
                                                 onLogoClick={() => navigate("/")}
-                                                onSearch={(query) => console.log("Searching:", query)}
                                                 onCartClick={() => navigate("/cart")}
                                                 onLoginClick={() => navigate("/login")}
                                                 onOrdersClick={() => navigate("/orders")}

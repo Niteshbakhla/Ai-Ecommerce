@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addToCartProduct, getUserCarts, removeCartItem } from "@/services/cart.services";
+import toast from "react-hot-toast";
 
 interface Props {
             product: {
@@ -15,10 +18,54 @@ interface Props {
             onAddToCart?: () => void;
             onProductClick?: () => void;
 }
+interface CartItem {
+            _id: string;
+            quantity: number;
+            productId: {
+                        _id: string;
+                        title: string;
+                        price: number;
+                        images: string[];
+            };
+}
 
-export default function ProductCard({ product, onAddToCart }: Props) {
+interface CartResponse {
+            items: CartItem[];
+}
+
+
+
+export default function ProductCard({ product }: Props) {
             const [isWishlisted, setIsWishlisted] = useState(false);
             const navigate = useNavigate();
+            const queryClient = useQueryClient();
+            const { data: cartData } = useQuery<CartResponse>({
+                        queryKey: ["cart"],
+                        queryFn: getUserCarts,
+            });
+
+            const isInCart = (productId: string) =>
+                        cartData?.items?.some((item: CartItem) => item.productId._id === productId);
+
+
+            const userCartMutate = useMutation({
+                        mutationFn: addToCartProduct,
+                        onSuccess(data) {
+                                    toast.success(data.message);
+                                    queryClient.invalidateQueries({ queryKey: ["cart"] });
+
+                        },
+            });
+
+            const removeCartMutation = useMutation({
+                        mutationFn: removeCartItem,
+                        onSuccess(data) {
+                                    toast.success(data.message)
+                                    queryClient.invalidateQueries({ queryKey: ["cart"] })
+                        }
+
+            })
+
             return (
                         <Card className="group relative overflow-hidden border-0 bg-gray-50 hover:bg-white transition-all duration-300 ">
 
@@ -46,7 +93,7 @@ export default function ProductCard({ product, onAddToCart }: Props) {
 
                                     {/* Content */}
                                     <CardContent className="p-4 space-y-2 ">
-                                                <button  className="text-left w-full">
+                                                <button className="text-left w-full">
                                                             <h3 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-gray-600 transition-colors">
                                                                         {product.title}
                                                             </h3>
@@ -65,13 +112,38 @@ export default function ProductCard({ product, onAddToCart }: Props) {
                                                 </div>
 
                                                 {/* Add to Cart Button */}
-                                                <Button
-                                                            onClick={onAddToCart}
-                                                            className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors"
-                                                            size="sm"
-                                                >
-                                                            Add to Cart
-                                                </Button>
+
+                                                {isInCart(product._id) ? (
+                                                            <div className="flex items-center gap-2">
+                                                                        {/* Go to Cart */}
+                                                                        <Button
+                                                                                    onClick={() => navigate("/cart")}
+                                                                                    className="flex-1 bg-gray-700 text-white hover:bg-gray-800"
+                                                                                    size="sm"
+                                                                        >
+                                                                                    Go to cart
+                                                                        </Button>
+
+                                                                        {/* Small Delete Button */}
+                                                                        <Button
+                                                                                    onClick={() => removeCartMutation.mutate(product._id)} 
+                                                                                    variant="outline"
+                                                                                    size="icon"
+                                                                                    className="h-8 w-8 p-0 border-gray-300 hover:bg-red-50 hover:text-red-600"
+                                                                        >
+                                                                                    ✕
+                                                                        </Button>
+                                                            </div>
+                                                ) : (
+                                                            <Button
+                                                                        onClick={() => userCartMutate.mutate(product._id)}
+                                                                        className="w-full bg-gray-900 text-white hover:bg-gray-800"
+                                                                        size="sm"
+                                                            >
+                                                                        Add to Cart
+                                                            </Button>
+                                                )}
+
                                     </CardContent>
                         </Card>
             );

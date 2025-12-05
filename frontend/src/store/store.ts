@@ -6,58 +6,60 @@ import authReducer from "./slices/authSlices";
 
 // -------------------------------------------------------
 // 2. IMPORT REDUX-PERSIST
-// - storage = uses localStorage
-// - persistReducer = wraps reducers so state saves/restores
 // -------------------------------------------------------
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
 
+// 👉 Add these:
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 
 // -------------------------------------------------------
 // 3. CONFIGURE PERSIST SETTINGS
-// key = name of entry inside localStorage
-// storage = where to save (localStorage)
 // -------------------------------------------------------
 const persistConfig = {
-            key: "root",
-            storage,
+  key: "root",
+  storage,
 };
-
 
 // -------------------------------------------------------
 // 4. COMBINE YOUR REDUCERS
-// (even if you have only 1, combineReducers is still valid)
 // -------------------------------------------------------
 const rootReducer = combineReducers({
-            auth: authReducer,   // now your state becomes state.auth
+  auth: authReducer,
 });
 
-
 // -------------------------------------------------------
-// 5. WRAP THE ROOT REDUCER WITH PERSISTREDUCER
-// This allows Redux to auto-save + auto-restore state
+// 5. WRAP ROOT REDUCER WITH PERSISTREDUCER
 // -------------------------------------------------------
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-
 // -------------------------------------------------------
-// 6. CREATE THE STORE
-// IMPORTANT: pass persistedReducer directly!
+// 6. CREATE THE STORE (WITH FIXED MIDDLEWARE)
 // -------------------------------------------------------
 export const store = configureStore({
-            reducer: persistedReducer,   // ✔ Correct
-});
+  reducer: persistedReducer,
 
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
 
 // -------------------------------------------------------
 // 7. CREATE PERSISTOR
-// This will restore Redux state on refresh
 // -------------------------------------------------------
 export const persistor = persistStore(store);
 
-
-// Redux types (optional but helpful)
+// Redux types
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-            

@@ -10,6 +10,7 @@ const API = axios.create({
 // Add access token to requests
 API.interceptors.request.use((config) => {
             const token = store.getState().auth.accessToken;
+            // console.log(token, "here it is ")
             if (token) config.headers.Authorization = `Bearer ${token}`;
             return config;
 });
@@ -25,22 +26,18 @@ API.interceptors.response.use(
                                     originalRequest._retry = true;
 
                                     try {
-                                                // call our refresh endpoint
-                                                const res = await axios.get(
-                                                            "http://localhost:4000/api/auth/refresh",
-                                                            { withCredentials: true }
-                                                );
+                                                const res = await API.get("/auth/refresh");
 
                                                 const newAccessToken = res.data.accessToken;
                                                 const user = store.getState().auth.user;
 
-                                                // update redux state
+                                                // Update redux
                                                 store.dispatch(setCredentials({ user, accessToken: newAccessToken }));
-                                              
 
-                                                // retry old request with new token
+                                                // Retry original request
                                                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                                                 return API(originalRequest);
+
                                     } catch (err) {
                                                 store.dispatch(logout());
                                     }

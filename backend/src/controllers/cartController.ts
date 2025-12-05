@@ -14,10 +14,11 @@ export const getCartController = asyncHandler(
 
 export const createCartController = asyncHandler(
             async (req: AuthRequest, res: Response) => {
-                        const { productId, quantity } = req.body;
+                        const { productId } = req.body;
+                         console.log(productId)
                         const userId = req.user?.id;
 
-                        const cart = await addToCart(userId, productId, quantity);
+                        const cart = await addToCart(userId, productId);
 
                         res.status(201).json({ success: true, message: "added to cart", cart });
             }

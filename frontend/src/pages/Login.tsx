@@ -11,12 +11,13 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useMutation } from "@tanstack/react-query";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { loginUser } from "../api/auth/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import { setCredentials } from "@/store/slices/authSlices";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import { getNewAccessToken } from "@/services/auth.service";
 
 
 export default function Login() {
@@ -30,6 +31,7 @@ export default function Login() {
                         mutationFn: loginUser,
                         onSuccess: ({ data }) => {
                                     dispatch(setCredentials({ user: data.user, accessToken: data.accessToken }))
+                                   
                                     toast.success("Login successfully! You can login now.");
                                     navigate("/")
                         },
@@ -37,6 +39,7 @@ export default function Login() {
                                     toast.error(err.response?.data?.message || "Login failed");
                         },
             });
+
 
             const handleGoogleLogin = () => {
                         window.location.href = `${import.meta.env.VITE_API_BASE_URL}/auth/google`;

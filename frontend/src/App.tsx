@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import Layout from "./components/layouts/Layout"
 import Home from "./pages/Home"
 import ProductDetails from "./pages/ProductDetail"
+import CartPage from "./pages/Cart"
 
 
 
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<CartPage />} />
 
           </Routes>
         </Layout>

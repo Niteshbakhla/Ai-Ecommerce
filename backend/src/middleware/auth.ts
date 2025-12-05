@@ -14,23 +14,37 @@ export interface AuthRequest extends Request {
 export const auth = asyncHandler(
             async (req: AuthRequest, res: Response, next: NextFunction) => {
                         const header = req.headers.authorization;
+
                         if (!header || !header.startsWith("Bearer ")) {
-                                    throw new AppError("Unauthorized", 401);
+                                    res.status(401).json({ message: "Unauthorized" });
+                                    return;
                         }
 
                         const token = header.split(" ")[1];
-                        const payload = jwt.verify(token, JWT_SECRET as string) as {
-                                    id: string;
-                                    role: string
+
+                        try {
+                                    const payload = jwt.verify(token, JWT_SECRET as string) as {
+                                                id: string;
+                                                role: string;
+                                    };
+
+                                    const user = await User.findById(payload.id).select("-password");
+
+                                    if (!user) {
+                                                res.status(401).json({ message: "Unauthorized" });
+                                                return;
+                                    }
+
+                                    req.user = user;
+                                    next();
+
+                        } catch (err) {
+                                    res.status(401).json({ message: "Token expired or invalid" });
+                                    return;
                         }
-                        const user = await User.findById(payload.id).select("-password");
-                        if (!user) {
-                                    throw new AppError("Unauthorized", 401)
-                        }
-                        req.user = user;
-                        next();
             }
-)
+);
+
 
 
 export const isAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {

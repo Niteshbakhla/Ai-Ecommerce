@@ -8,7 +8,9 @@ export const getUserCart = async (userId: string) => {
             return Cart.findOne({ userId }).populate("items.productId");
 }
 
-export const addToCart = async (userId: string, productId: string, quantity: number = 1) => {
+export const addToCart = async (userId: string, productId: string) => {
+
+
             const product = await Product.findById(productId);
             if (!product) throw new AppError("product not found ", 404);
 
@@ -17,11 +19,11 @@ export const addToCart = async (userId: string, productId: string, quantity: num
             const productObjectId = new mongoose.Types.ObjectId(productId);
 
             if (!cart) {
-                        cart = await Cart.create({ userId, items: [{ productId: productObjectId, quantity }] });
+                        cart = await Cart.create({ userId, items: [{ productId: productObjectId, quantity: 1 }] });
             } else {
                         const item = cart.items.find((i) => i.productId.toString() === productId);
-                        if (item) item.quantity += quantity;
-                        else cart.items.push({ productId: productObjectId, quantity });
+                        if (item) item.quantity += 1;
+                        else cart.items.push({ productId: productObjectId, quantity: 1 });
 
                         await cart.save();
             }
