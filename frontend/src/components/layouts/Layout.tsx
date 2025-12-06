@@ -22,10 +22,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         dispatch(logout());   // 👈 correct Redux logout
                         navigate("/login");
             };
-            const getCurrentPage = (pathname: string): "/" | "login" | "register" | undefined => {
+            const getCurrentPage = (pathname: string): "/" | "login" | "register" | "admin-dashboard" | undefined => {
                         if (pathname === "/") return "/";
                         if (pathname.includes("/login")) return "login";
                         if (pathname.includes("/register")) return "register";
+                        if (pathname.includes("/admin-dashboard")) return "admin-dashboard"
                         return undefined;
             };
 

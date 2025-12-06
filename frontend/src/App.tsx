@@ -6,22 +6,38 @@ import Home from "./pages/Home"
 import ProductDetails from "./pages/ProductDetail"
 import CartPage from "./pages/Cart"
 import AdminDashboard from "./pages/admin-dashboard/AdminDashboard"
+import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
+import { useSelector } from "react-redux"
+import type { RootState } from "./store/store"
+
 
 
 
 const App = () => {
+
+
+
   return (
     <div>
-
       <BrowserRouter>
         <Layout>
           <Routes>
+
+            {/* Pubic */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+            {/* Protected */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/cart" element={<CartPage />} />
+            </Route>
+
+            {/* Admin Only */}
+            <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            </Route>
 
           </Routes>
         </Layout>

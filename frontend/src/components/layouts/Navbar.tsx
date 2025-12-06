@@ -16,7 +16,7 @@ interface NavbarProps {
                         email?: string;
             } | null;
             cartCount?: number;
-            currentPage?: '/' | 'login' | 'register';
+            currentPage?: '/' | 'login' | 'register' | "admin-dashboard";
             onLogoClick?: () => void;
             onCartClick?: () => void;
             onLoginClick?: () => void;
@@ -43,6 +43,7 @@ export default function Navbar({
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
             const isAuthPage = currentPage === 'login' || currentPage === 'register';
+            if (currentPage === "admin-dashboard") return null;
 
             // Auth page navbar (login/register)
             if (isAuthPage) {
