@@ -3,6 +3,7 @@ import { getUserCarts, removeCartItem, updateCartQuantity, } from "@/services/ca
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
@@ -24,10 +25,15 @@ export default function CartPage() {
                         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
             });
 
+          
+
             // 🔥 Remove item mutation
             const removeItemMutation = useMutation({
-                        mutationFn: (itemId: string) => removeCartItem(itemId),
-                        onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
+                        mutationFn: removeCartItem,
+                        onSuccess: (data) => {
+                                    toast.success(data.message);
+                                    queryClient.invalidateQueries({ queryKey: ["cart"] });
+                        },
             });
 
             // Promo state
@@ -85,7 +91,7 @@ export default function CartPage() {
                                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                                                             {/* Cart Items */}
-                                                            <div className="lg:col-span-2 space-y-4">
+                                                            <div className="lg:col-span-2 space-y-4 lg:h-[300px] overflow-y-scroll ">
                                                                         {cartItems.map((item: any) => (
                                                                                     <div key={item._id} className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md">
 
@@ -101,7 +107,7 @@ export default function CartPage() {
                                                                                                                         <div className="flex justify-between">
                                                                                                                                     <h3 className="text-lg font-semibold">{item.productId.title}</h3>
                                                                                                                                     <button
-                                                                                                                                                onClick={() => removeItemMutation.mutate(item._id)}
+                                                                                                                                                onClick={() => removeItemMutation.mutate(item.productId._id)}
                                                                                                                                                 className="hidden sm:flex items-center justify-center w-9 h-9 hover:bg-red-50 rounded-lg"
                                                                                                                                     >
                                                                                                                                                 <Trash2 className="h-5 w-5 text-gray-400 hover:text-red-500" />
