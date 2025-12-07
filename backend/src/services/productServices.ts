@@ -48,7 +48,10 @@ export const listProducts = async (query: ListQuery) => {
             const filter: FilterQuery<IProduct> = {};
 
             if (search) {
-                        filter.$text = { $search: search }
+                        if (search) {
+                                    filter.title = { $regex: search, $options: "i" }; // case-insensitive
+                        }
+
             }
 
             if (category) {

@@ -8,9 +8,10 @@ interface Props {
 
 export default function ProtectedRoute({ allowedRoles }: Props) {
             const user = useSelector((state: RootState) => state.auth.user)
+            const accessToken = useSelector((state: RootState) => state.auth.accessToken)
 
             // Not logged in?
-            if (!user) {
+            if (!user || !accessToken) {
                         return <Navigate to="/login" replace />;
             }
 

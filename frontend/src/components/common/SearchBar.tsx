@@ -1,12 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function SearchBar() {
+
+type Props = {
+            setSearch: (value: string) => void;
+};
+
+
+
+
+export default function SearchBar({ setSearch }: Props) {
             const [searchValue, setSearchValue] = useState("");
             const [isFocused, setIsFocused] = useState(false);
 
+
+
             const handleClear = () => {
+                        setSearch("");
                         setSearchValue("");
             };
 
@@ -19,10 +30,16 @@ export default function SearchBar() {
                                                                         }`}
                                                 />
 
+                                             
+
                                                 {/* Input */}
                                                 <Input
                                                             value={searchValue}
-                                                            onChange={(e) => setSearchValue(e.target.value)}
+                                                            onChange={(e) => {
+                                                                        const value = e.target.value
+                                                                        setSearch(value)
+                                                                        setSearchValue(value)
+                                                            }}
                                                             onFocus={() => setIsFocused(true)}
                                                             onBlur={() => setIsFocused(false)}
                                                             placeholder="Search for products, brands, and more..."
