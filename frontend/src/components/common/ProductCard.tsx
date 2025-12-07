@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
+import { Heart, LucideTrash2, Trash, Trash2, Trash2Icon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -126,12 +126,12 @@ export default function ProductCard({ product }: Props) {
 
                                                                         {/* Small Delete Button */}
                                                                         <Button
-                                                                                    onClick={() => removeCartMutation.mutate(product._id)} 
+                                                                                    onClick={() => removeCartMutation.mutate(product._id)}
                                                                                     variant="outline"
                                                                                     size="icon"
                                                                                     className="h-8 w-8 p-0 border-gray-300 hover:bg-red-50 hover:text-red-600"
                                                                         >
-                                                                                    ✕
+                                                                                    <Trash2 />
                                                                         </Button>
                                                             </div>
                                                 ) : (
