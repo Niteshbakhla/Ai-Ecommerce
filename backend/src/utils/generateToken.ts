@@ -5,7 +5,7 @@ const { JWT_SECRET, JWT_REFRESH_SECRET } = config;
 
 export const generateAccessToken = (id: string, role: string): string => {
             return jwt.sign({ id, role }, JWT_SECRET as string, {
-                        expiresIn: "5s",
+                        expiresIn: "15m",
             });
 };
 
