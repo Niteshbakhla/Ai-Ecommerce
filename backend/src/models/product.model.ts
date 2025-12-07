@@ -50,7 +50,7 @@ const productSchema = new Schema<IProduct>(
             { timestamps: true }
 );
 
-productSchema.index({ title: "text", description: "text" });
+// productSchema.index({ title: "text", description: "text" });
 productSchema.index({ price: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ ratingAverage: -1 });
