@@ -1,11 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProductById, getSimilarProducts } from "@/services/product.service";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Truck, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { addToCartProduct } from "@/services/cart.services";
 import toast from "react-hot-toast";
+import { addOrUpdateReview, deleteReview, getReviews } from "@/services/review.service";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 export default function ProductDetails() {
             const { id } = useParams();
@@ -13,6 +16,8 @@ export default function ProductDetails() {
             const [selectedImage, setSelectedImage] = useState(0);
             const [isWishlisted, setIsWishlisted] = useState(false);
             const [quantity, setQuantity] = useState(1);
+            const queryClient = useQueryClient();
+            const user = useSelector((state: RootState) => state.auth.user);
 
             // Fetch main product
             const { data: product, isLoading: productLoading } = useQuery({
@@ -36,6 +41,29 @@ export default function ProductDetails() {
                                     toast.error(err.response?.data?.message || "add to cart failed");
                         },
             })
+
+            // const {
+            //             data: reviews,
+            //             isLoading: reviewsLoading,
+            //             refetch: refetchReviews,
+            // } = useQuery({
+            //             queryKey: ["reviews", id],
+            //             queryFn: () => getReviews(id!),
+            // });
+
+            const addReviewMutation = useMutation({
+                        mutationFn: (formData: any) => addOrUpdateReview(id!, formData),
+                        onSuccess: () => {
+                                    queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+                        },
+            });
+
+            const deleteReviewMutation = useMutation({
+                        mutationFn: (reviewId: string) => deleteReview(reviewId),
+                        onSuccess: () => {
+                                    queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+                        },
+            });
 
             if (productLoading) {
                         return (
@@ -268,6 +296,47 @@ export default function ProductDetails() {
                                                                         </div>
                                                             </div>
                                                 )}
+
+                                                {/* Add Review Form (only if logged in) */}
+                                                {user && (
+                                                            <form
+                                                                        className="space-y-2 mt-6"
+                                                                        onSubmit={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    const formData = {
+                                                                                                rating: Number((e.target as any).rating.value),
+                                                                                                comment: (e.target as any).comment.value,
+                                                                                    };
+                                                                                    addReviewMutation.mutate(formData);
+                                                                                    (e.target as any).reset();
+                                                                        }}
+                                                            >
+                                                                        <select
+                                                                                    name="rating"
+                                                                                    className="border p-2 rounded w-full"
+                                                                                    required
+                                                                        >
+                                                                                    <option value="">Select rating</option>
+                                                                                    {[1, 2, 3, 4, 5].map((n) => (
+                                                                                                <option value={n} key={n}>
+                                                                                                            {n}
+                                                                                                </option>
+                                                                                    ))}
+                                                                        </select>
+
+                                                                        <textarea
+                                                                                    name="comment"
+                                                                                    placeholder="Write your review..."
+                                                                                    className="border p-2 rounded w-full"
+                                                                                    required
+                                                                        />
+
+                                                                        <button className="bg-blue-600 text-white px-4 py-2 rounded">
+                                                                                    Submit Review
+                                                                        </button>
+                                                            </form>
+                                                )}
+
                                     </div>
                         </div>
             );
