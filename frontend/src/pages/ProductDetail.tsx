@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { addOrUpdateReview, deleteReview, getReviews } from "@/services/review.service";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
+import SimilarProducts from "@/components/common/SimilarProducts";
+import ReviewForm from "@/components/common/ReviewForm";
 
 export default function ProductDetails() {
             const { id } = useParams();
@@ -32,6 +34,8 @@ export default function ProductDetails() {
                         enabled: !!id,
             });
 
+            console.log("similar products:-", similar)
+
             const cartMutation = useMutation({
                         mutationFn: addToCartProduct,
                         onSuccess: (data) => {
@@ -40,7 +44,7 @@ export default function ProductDetails() {
                         onError: (err: any) => {
                                     toast.error(err.response?.data?.message || "add to cart failed");
                         },
-            })
+            });
 
             // const {
             //             data: reviews,
@@ -265,76 +269,14 @@ export default function ProductDetails() {
 
                                                 {/* Similar Products Section */}
                                                 {similar && similar.length > 0 && (
-                                                            <div className="mt-16">
-                                                                        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                                                                                    Similar Products
-                                                                        </h2>
-                                                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                                                                                    {similar.map((p: any) => (
-                                                                                                <button
-                                                                                                            key={p._id}
-                                                                                                            onClick={() => navigate(`/product/${p._id}`)}
-                                                                                                            className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
-                                                                                                >
-                                                                                                            <div className="aspect-square bg-gray-100 overflow-hidden">
-                                                                                                                        <img
-                                                                                                                                    src={p.images[0]}
-                                                                                                                                    alt={p.title}
-                                                                                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                                                                                        />
-                                                                                                            </div>
-                                                                                                            <div className="p-4 space-y-2">
-                                                                                                                        <h3 className="text-sm font-medium text-gray-900 line-clamp-2 text-left">
-                                                                                                                                    {p.title}
-                                                                                                                        </h3>
-                                                                                                                        <p className="text-lg font-bold text-gray-900 text-left">
-                                                                                                                                    ₹{p.price.toLocaleString()}
-                                                                                                                        </p>
-                                                                                                            </div>
-                                                                                                </button>
-                                                                                    ))}
-                                                                        </div>
-                                                            </div>
+                                                            <SimilarProducts similar={similar} />
                                                 )}
 
                                                 {/* Add Review Form (only if logged in) */}
                                                 {user && (
-                                                            <form
-                                                                        className="space-y-2 mt-6"
-                                                                        onSubmit={(e) => {
-                                                                                    e.preventDefault();
-                                                                                    const formData = {
-                                                                                                rating: Number((e.target as any).rating.value),
-                                                                                                comment: (e.target as any).comment.value,
-                                                                                    };
-                                                                                    addReviewMutation.mutate(formData);
-                                                                                    (e.target as any).reset();
-                                                                        }}
-                                                            >
-                                                                        <select
-                                                                                    name="rating"
-                                                                                    className="border p-2 rounded w-full"
-                                                                                    required
-                                                                        >
-                                                                                    <option value="">Select rating</option>
-                                                                                    {[1, 2, 3, 4, 5].map((n) => (
-                                                                                                <option value={n} key={n}>
-                                                                                                            {n}
-                                                                                                </option>
-                                                                                    ))}
-                                                                        </select>
 
-                                                                        <textarea
-                                                                                    name="comment"
-                                                                                    placeholder="Write your review..."
-                                                                                    className="border p-2 rounded w-full"
-                                                                                    required
-                                                                        />
 
-                                                                        <button className="bg-blue-600 text-white px-4 py-2 rounded">
-                                                                                    Submit Review
-                                                                        </button>
-                                                            </form>
+                                                            <ReviewForm addReviewMutation={addReviewMutation} />
                                                 )}
 
                                     </div>

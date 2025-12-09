@@ -14,3 +14,21 @@ export type StatCardProps = {
             change: string;
             icon: React.ComponentType<{ className?: string }>;
 };
+
+export type SimilarType = {
+            _id: string;
+            title: string;
+            description: string;
+            price: number;
+            images: string[];
+            stock: number;
+            isFeatured: boolean;
+            ratingsAverage: number;
+            ratingsCount: number;
+            searchText: string;
+            createdBy: string;
+            createdAt: string;
+            updatedAt: string;
+            embeddingVector: number[]; // if it exists but empty
+};
+
