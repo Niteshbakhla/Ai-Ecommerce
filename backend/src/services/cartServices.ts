@@ -45,3 +45,43 @@ export const removeCartItem = async (userId: string, productId: string) => {
 export const clearCart = async (userId: string) => {
             return Cart.findOneAndDelete({ userId });
 }
+
+export const updateQuantity = async (
+            userId: string,
+            productId: string,
+            change: number
+) => {
+            const cart = await Cart.findOne({ userId });
+
+            if (!cart) return;
+
+            const item = cart.items.find(
+                        (i: any) => i.productId.toString() === productId
+            );
+
+            if (!item) return;
+
+            const newQty = item.quantity + change;
+
+            // If quantity would go below 1 -> remove item
+            if (newQty < 1) {
+                        await Cart.updateOne(
+                                    { userId },
+                                    { $pull: { items: { productId } } }
+                        );
+                        return;
+            }
+
+            // Just update the quantity
+            await Cart.updateOne(
+                        {
+                                    userId,
+                                    "items.productId": productId,
+                        },
+                        {
+                                    $set: {
+                                                "items.$.quantity": newQty,
+                                    },
+                        }
+            );
+};
