@@ -45,7 +45,7 @@ export default function ProductCard({ product }: Props) {
             });
 
             const isInCart = (productId: string) =>
-                        cartData?.items?.some((item: CartItem) => item.productId._id === productId);
+                        cartData?.items?.some((item: CartItem) => item.productId?._id === productId);
 
 
             const userCartMutate = useMutation({
