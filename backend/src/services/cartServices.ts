@@ -49,20 +49,18 @@ export const clearCart = async (userId: string) => {
 export const updateQuantity = async (
             userId: string,
             productId: string,
-            change: number
+            quantity: number
 ) => {
+
             const cart = await Cart.findOne({ userId });
-
             if (!cart) return;
-
             const item = cart.items.find(
                         (i: any) => i.productId.toString() === productId
             );
 
             if (!item) return;
 
-            const newQty = item.quantity + change;
-
+            const newQty = item.quantity + quantity;
             // If quantity would go below 1 -> remove item
             if (newQty < 1) {
                         await Cart.updateOne(
