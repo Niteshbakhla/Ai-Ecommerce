@@ -13,7 +13,7 @@ router.route("/").get(getCartController)
 
 router.route("/clear-all").delete(clearCartController);
 router.route("/:id").delete(removeCartController)
-            .patch(updateQuantityController)
+.patch(updateQuantityController)
 
 
 
