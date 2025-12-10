@@ -59,7 +59,7 @@ export default function CartPage() {
 
             // 🧮 Price calculations
             const subtotal = cartItems.reduce(
-                        (sum: number, item: any) => sum + item.productId.price * item.quantity,
+                        (sum: number, item: any) => sum + item.productId?.price * item.quantity,
                         0
             );
 
@@ -99,22 +99,22 @@ export default function CartPage() {
 
                                                                                                             {/* Product Image */}
                                                                                                             <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden">
-                                                                                                                        <img src={item.productId.image} className="w-full h-full object-cover" />
+                                                                                                                        <img src={item.productId?.image} className="w-full h-full object-cover" />
                                                                                                             </div>
 
                                                                                                             {/* Product Info */}
                                                                                                             <div className="flex-1">
                                                                                                                         <div className="flex justify-between">
-                                                                                                                                    <h3 className="text-lg font-semibold">{item.productId.title}</h3>
+                                                                                                                                    <h3 className="text-lg font-semibold">{item.productId?.title}</h3>
                                                                                                                                     <button
-                                                                                                                                                onClick={() => removeItemMutation.mutate(item.productId._id)}
+                                                                                                                                                onClick={() => removeItemMutation.mutate(item.productId?._id)}
                                                                                                                                                 className="hidden sm:flex items-center justify-center w-9 h-9 hover:bg-red-50 rounded-lg"
                                                                                                                                     >
                                                                                                                                                 <Trash2 className="h-5 w-5 text-gray-400 hover:text-red-500" />
                                                                                                                                     </button>
                                                                                                                         </div>
 
-                                                                                                                        <p className="text-xl font-bold">₹{item.productId.price}</p>
+                                                                                                                        <p className="text-xl font-bold">₹{item.productId?.price}</p>
 
                                                                                                                         {/* Quantity Controls */}
                                                                                                                         <div className="flex items-center justify-between mt-4">
@@ -125,8 +125,8 @@ export default function CartPage() {
                                                                                                                                                             disabled={item.quantity <= 1}
                                                                                                                                                             onClick={() =>
                                                                                                                                                                         updateQuantityMutation.mutate({
-                                                                                                                                                                                    itemId: item._id,
-                                                                                                                                                                                    quantity: item.quantity - 1,
+                                                                                                                                                                                    itemId: item?.productId._id,
+                                                                                                                                                                                    quantity: -1,
                                                                                                                                                                         })
                                                                                                                                                             }
                                                                                                                                                             className="w-8 h-8 hover:bg-white rounded-md"
@@ -140,8 +140,8 @@ export default function CartPage() {
                                                                                                                                                 <button
                                                                                                                                                             onClick={() =>
                                                                                                                                                                         updateQuantityMutation.mutate({
-                                                                                                                                                                                    itemId: item._id,
-                                                                                                                                                                                    quantity: item.quantity + 1,
+                                                                                                                                                                                    itemId: item?.productId._id,
+                                                                                                                                                                                    quantity: 1,
                                                                                                                                                                         })
                                                                                                                                                             }
                                                                                                                                                             className="w-8 h-8 hover:bg-white rounded-md"
