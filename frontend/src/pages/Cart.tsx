@@ -5,6 +5,9 @@ import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { createCheckoutOrder, verifyPayment } from "@/api/payment.api";
+import { loadRazorpay } from "@/utils/loadRazorpay";
+
 
 export default function CartPage() {
             const navigate = useNavigate();
@@ -25,7 +28,7 @@ export default function CartPage() {
                         onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cart"] }),
             });
 
-          
+
 
             // 🔥 Remove item mutation
             const removeItemMutation = useMutation({
@@ -35,6 +38,66 @@ export default function CartPage() {
                                     queryClient.invalidateQueries({ queryKey: ["cart"] });
                         },
             });
+
+            // 👉 Handles full payment flow
+            const handleCheckout = async () => {
+
+                        // 1️⃣ Load Razorpay SDK first
+                        const loaded = await loadRazorpay();
+
+                        if (!loaded) {
+                                    toast.error("Failed to load Razorpay script");
+                                    return;
+                        }
+
+                        // 2️⃣ Create order from backend API
+                        // backend will generate a real Razorpay order
+                        try {
+                                    const orderResult = await createCheckoutOrder(total);
+
+                                    if (!orderResult.success) {
+                                                toast.error("Order creation failed");
+                                                return;
+                                    }
+
+                                    const { razorpayOrderId, amount, currency, key_id } = orderResult;
+                                    // return console.log(razorpayOrderId, key_id, amount)
+
+                                    // 3️⃣ Configure Razorpay options
+                                    const options = {
+                                                key: key_id, // Public key from backend
+                                                amount: amount, // Must be in paise
+                                                currency: currency,
+                                                name: "My Store Checkout",
+                                                description: "Cart Payment",
+                                                order_id: razorpayOrderId,
+
+                                                // 👉 After payment success, this function runs
+                                                handler: async (response: any) => {
+
+                                                            // 4️⃣ Verify the payment signature from backend
+                                                            const verifyResult = await verifyPayment(response);
+
+                                                            if (verifyResult.success) {
+                                                                        toast.success("Payment successful ✔");
+                                                                        navigate("/"); // redirect or show success message
+                                                            } else {
+                                                                        toast.error("Payment verification failed ❌");
+                                                            }
+                                                },
+                                    };
+
+
+                                    // 5️⃣ Open Razorpay UI popup
+                                    const rzp = new (window as any).Razorpay(options);
+                                    rzp.open();
+
+                        } catch (error) {
+                                    toast.error("Something went wrong during checkout");
+                                    console.error(error);
+                        }
+            };
+
 
             // Promo state
             const [promoCode, setPromoCode] = useState("");
@@ -197,9 +260,13 @@ export default function CartPage() {
                                                                                                 <span>₹{total}</span>
                                                                                     </div>
 
-                                                                                    <Button className="w-full bg-gray-900 text-white h-12 rounded-full">
+                                                                                    <Button
+                                                                                                onClick={handleCheckout}
+                                                                                                className="w-full bg-gray-900 text-white h-12 rounded-full"
+                                                                                    >
                                                                                                 Proceed to Checkout
                                                                                     </Button>
+
 
                                                                         </div>
                                                             </div>

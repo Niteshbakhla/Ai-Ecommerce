@@ -61,7 +61,8 @@ export const createCheckoutOrder = async (userId: string, address: AddressInput)
                         amount: razorpayOrder.amount,
                         currency: razorpayOrder.currency,
                         orderId: order._id,
-                        keyId: RAZORPAY_KEY_ID,
+                        key_id: RAZORPAY_KEY_ID,
+                        success: true
             };
 }
 
