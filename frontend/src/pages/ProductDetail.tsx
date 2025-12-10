@@ -274,9 +274,8 @@ export default function ProductDetails() {
 
                                                 {/* Add Review Form (only if logged in) */}
                                                 {user && (
-
-
-                                                            <ReviewForm addReviewMutation={addReviewMutation} />
+                                                            
+                                                <ReviewForm addReviewMutation={addReviewMutation} />
                                                 )}
 
                                     </div>
