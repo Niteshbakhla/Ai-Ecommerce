@@ -40,6 +40,7 @@ export default function ProductDetails() {
                         mutationFn: addToCartProduct,
                         onSuccess: (data) => {
                                     toast.success(data.message)
+                                    queryClient.invalidateQueries({ queryKey: ["cart"] });
                         },
                         onError: (err: any) => {
                                     toast.error(err.response?.data?.message || "add to cart failed");
