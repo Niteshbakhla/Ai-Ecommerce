@@ -18,7 +18,6 @@ export const getUserCarts = async () => {
 export const updateCartQuantity = async (itemId: string, quantity: number) => {
             console.log(itemId)
             const res = await API.patch(`/cart/${itemId}`, { quantity });
-            console.log(res)
             return res.data;
 };
 
