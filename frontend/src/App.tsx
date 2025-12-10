@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/admin-dashboard/AdminDashboard"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
 import { useSelector } from "react-redux"
 import type { RootState } from "./store/store"
+import OrdersPage from "./pages/Order"
 
 
 
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/orders" element={<OrdersPage />} />
             </Route>
 
             {/* Admin Only */}

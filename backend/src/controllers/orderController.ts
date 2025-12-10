@@ -45,3 +45,10 @@ export const getMyOrderByIdController = asyncHandler(
                         res.status(200).json(order);
             }
 )
+
+export const getUserOrderController = asyncHandler(
+            async (req: AuthRequest, res: Response, next: NextFunction) => {
+                        const orders = await getUserOrders(req.user?.id);
+                        res.status(200).json(orders)
+            }
+)
