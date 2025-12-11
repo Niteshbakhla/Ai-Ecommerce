@@ -27,6 +27,8 @@ export default function OrdersPage() {
                         queryFn: getAllUserOrders
             });
 
+ 
+
             const getStatusConfig = (status: string) => {
                         const configs = {
                                     pending: {
@@ -120,14 +122,14 @@ export default function OrdersPage() {
                                                                                                             {/* Product Preview */}
                                                                                                             <div className="flex gap-3 mb-4">
                                                                                                                         <div className="flex -space-x-2">
-                                                                                                                                    {order.products.slice(0, 3).map((item, idx) => (
+                                                                                                                                    {/* {order.products.slice(0, 3).map((item, idx) => (
                                                                                                                                                 <img
                                                                                                                                                             key={idx}
                                                                                                                                                             src={item.productId.images[0]}
                                                                                                                                                             alt={item.productId.title}
                                                                                                                                                             className="w-12 h-12 rounded-lg border-2 border-white object-cover"
                                                                                                                                                 />
-                                                                                                                                    ))}
+                                                                                                                                    ))} */}
                                                                                                                                     {order.products.length > 3 && (
                                                                                                                                                 <div className="w-12 h-12 rounded-lg bg-gray-100 border-2 border-white flex items-center justify-center text-xs font-semibold text-gray-600">
                                                                                                                                                             +{order.products.length - 3}
@@ -172,11 +174,11 @@ export default function OrdersPage() {
                                                                                                                                     <p className="text-xs font-semibold text-gray-500 uppercase">Items</p>
                                                                                                                                     {order.products.map((item, idx) => (
                                                                                                                                                 <div key={idx} className="flex gap-3 bg-white p-3 rounded-lg">
-                                                                                                                                                            <img
+                                                                                                                                                            {/* <img
                                                                                                                                                                         src={item.productId.images[0]}
                                                                                                                                                                         alt={item.productId.title}
                                                                                                                                                                         className="w-14 h-14 rounded object-cover"
-                                                                                                                                                            />
+                                                                                                                                                            /> */}
                                                                                                                                                             <div className="flex-1 min-w-0">
                                                                                                                                                                         <p className="text-sm font-medium text-gray-900 truncate">
                                                                                                                                                                                     {item.productId.title}
@@ -196,11 +198,11 @@ export default function OrdersPage() {
                                                                                                                                                 <MapPin className="w-3 h-3" />
                                                                                                                                                 Delivery to
                                                                                                                                     </p>
-                                                                                                                                    <div className="bg-white p-3 rounded-lg text-sm">
+                                                                                                                                    {/* <div className="bg-white p-3 rounded-lg text-sm">
                                                                                                                                                 <p className="font-medium text-gray-900">{order.address.street}</p>
                                                                                                                                                 <p className="text-gray-600">{order.address.city}, {order.address.state} - {order.address.pincode}</p>
                                                                                                                                                 <p className="text-gray-600 mt-1">{order.address.phone}</p>
-                                                                                                                                    </div>
+                                                                                                                                    </div> */}
                                                                                                                         </div>
 
                                                                                                                         {/* Payment Info */}
