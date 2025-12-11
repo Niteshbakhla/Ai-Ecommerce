@@ -11,37 +11,11 @@ import {
             ChevronDown,
             Download
 } from 'lucide-react';
+import { getAllUserOrders } from '@/api/order';
+import type { IOrder } from '@/types/orderTypes';
 
-interface IOrderProduct {
-            productId: {
-                        _id: string;
-                        title: string;
-                        images: string[];
-                        price: number;
-            };
-            quantity: number;
-            priceAtPurchase: number;
-}
 
-interface IOrder {
-            _id: string;
-            userId: string;
-            products: IOrderProduct[];
-            paymentStatus: 'pending' | 'paid' | 'failed';
-            orderStatus: 'pending' | 'shipped' | 'delivered' | 'cancelled';
-            address: {
-                        street: string;
-                        city: string;
-                        state: string;
-                        pincode: string;
-                        phone: string;
-            };
-            paymentId?: string;
-            totalAmount: number;
-            razorpayOrderId: string;
-            createdAt: string;
-            updatedAt: string;
-}
+
 
 export default function OrdersPage() {
             const navigate = useNavigate();
@@ -50,111 +24,7 @@ export default function OrdersPage() {
             // Fetch orders
             const { data: orders, isLoading } = useQuery<IOrder[]>({
                         queryKey: ['orders'],
-                        queryFn: async () => {
-                                    // Mock data
-                                    return [
-                                                {
-                                                            _id: '1',
-                                                            userId: 'user123',
-                                                            products: [
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod1',
-                                                                                                title: 'Wireless Headphones Premium',
-                                                                                                images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'],
-                                                                                                price: 2999
-                                                                                    },
-                                                                                    quantity: 1,
-                                                                                    priceAtPurchase: 2999
-                                                                        },
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod2',
-                                                                                                title: 'Phone Case',
-                                                                                                images: ['https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400'],
-                                                                                                price: 499
-                                                                                    },
-                                                                                    quantity: 2,
-                                                                                    priceAtPurchase: 499
-                                                                        }
-                                                            ],
-                                                            paymentStatus: 'paid',
-                                                            orderStatus: 'delivered',
-                                                            address: {
-                                                                        street: '123 Main Street, Apartment 4B',
-                                                                        city: 'Mumbai',
-                                                                        state: 'Maharashtra',
-                                                                        pincode: '400001',
-                                                                        phone: '+91 98765 43210'
-                                                            },
-                                                            totalAmount: 3997,
-                                                            razorpayOrderId: 'order_abc123',
-                                                            paymentId: 'pay_xyz789',
-                                                            createdAt: '2024-01-15T10:30:00Z',
-                                                            updatedAt: '2024-01-18T14:20:00Z'
-                                                },
-                                                {
-                                                            _id: '2',
-                                                            userId: 'user123',
-                                                            products: [
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod3',
-                                                                                                title: 'Smart Watch Series 5',
-                                                                                                images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'],
-                                                                                                price: 4999
-                                                                                    },
-                                                                                    quantity: 1,
-                                                                                    priceAtPurchase: 4999
-                                                                        }
-                                                            ],
-                                                            paymentStatus: 'paid',
-                                                            orderStatus: 'shipped',
-                                                            address: {
-                                                                        street: '456 Park Avenue',
-                                                                        city: 'Delhi',
-                                                                        state: 'Delhi',
-                                                                        pincode: '110001',
-                                                                        phone: '+91 98765 43210'
-                                                            },
-                                                            totalAmount: 4999,
-                                                            razorpayOrderId: 'order_def456',
-                                                            paymentId: 'pay_uvw456',
-                                                            createdAt: '2024-01-20T09:15:00Z',
-                                                            updatedAt: '2024-01-21T11:30:00Z'
-                                                },
-                                                {
-                                                            _id: '3',
-                                                            userId: 'user123',
-                                                            products: [
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod4',
-                                                                                                title: 'Laptop Backpack',
-                                                                                                images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400'],
-                                                                                                price: 1299
-                                                                                    },
-                                                                                    quantity: 1,
-                                                                                    priceAtPurchase: 1299
-                                                                        }
-                                                            ],
-                                                            paymentStatus: 'paid',
-                                                            orderStatus: 'pending',
-                                                            address: {
-                                                                        street: '789 Lake Road',
-                                                                        city: 'Bangalore',
-                                                                        state: 'Karnataka',
-                                                                        pincode: '560001',
-                                                                        phone: '+91 98765 43210'
-                                                            },
-                                                            totalAmount: 1299,
-                                                            razorpayOrderId: 'order_ghi789',
-                                                            paymentId: 'pay_rst123',
-                                                            createdAt: '2024-01-22T14:45:00Z',
-                                                            updatedAt: '2024-01-22T14:45:00Z'
-                                                }
-                                    ];
-                        }
+                        queryFn: getAllUserOrders
             });
 
             const getStatusConfig = (status: string) => {
