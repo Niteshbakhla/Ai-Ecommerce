@@ -5,9 +5,14 @@ import Layout from "./components/layouts/Layout"
 import Home from "./pages/Home"
 import ProductDetails from "./pages/ProductDetail"
 import CartPage from "./pages/Cart"
-import AdminDashboard from "./pages/admin-dashboard/AdminDashboard"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
 import OrdersPage from "./pages/Order"
+import AdminLayout from "./components/layouts/AdminLayout"
+import DashboardPage from "./components/admin-components/Dashboard"
+import ProductsPage from "./components/admin-components/ProductPage"
+import OrderPage from "./components/admin-components/OrderPage"
+import CustomerPage from "./components/admin-components/CustomerPage"
+import AnalyticsPage from "./components/admin-components/AnalyticsPage"
 
 
 
@@ -36,7 +41,15 @@ const App = () => {
 
             {/* Admin Only */}
             <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminLayout />}>
+
+                <Route index element={<DashboardPage />} />
+                <Route path="products" element={<ProductsPage />} />
+                <Route path="orders" element={<OrderPage />} />
+                <Route path="customers" element={<CustomerPage />} />
+                <Route path="analytics" element={<AnalyticsPage />} />
+
+              </Route>
             </Route>
 
           </Routes>

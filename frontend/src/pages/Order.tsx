@@ -54,83 +54,12 @@ export default function OrdersPage() {
             const navigate = useNavigate();
             const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-            const { data } = useQuery({
-                        queryKey: ["orders"],
-                        queryFn:()=>getUserOrder()
-            })
+      
 
             // Fetch orders - replace with your API call
             const { data: orders, isLoading } = useQuery<IOrder[]>({
                         queryKey: ['orders'],
-                        queryFn: async () => {
-                                    // Replace with your API endpoint
-                                    // const response = await fetch('/api/orders');
-                                    // return response.json();
-
-                                    // Mock data for demo
-                                    return [
-                                                {
-                                                            _id: '1',
-                                                            userId: 'user123',
-                                                            products: [
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod1',
-                                                                                                title: 'Wireless Headphones Premium',
-                                                                                                images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'],
-                                                                                                price: 2999
-                                                                                    },
-                                                                                    quantity: 1,
-                                                                                    priceAtPurchase: 2999
-                                                                        }
-                                                            ],
-                                                            paymentStatus: 'paid',
-                                                            orderStatus: 'delivered',
-                                                            address: {
-                                                                        street: '123 Main Street, Apartment 4B',
-                                                                        city: 'Mumbai',
-                                                                        state: 'Maharashtra',
-                                                                        pincode: '400001',
-                                                                        phone: '+91 98765 43210'
-                                                            },
-                                                            totalAmount: 2999,
-                                                            razorpayOrderId: 'order_abc123',
-                                                            paymentId: 'pay_xyz789',
-                                                            createdAt: '2024-01-15T10:30:00Z',
-                                                            updatedAt: '2024-01-18T14:20:00Z'
-                                                },
-                                                {
-                                                            _id: '2',
-                                                            userId: 'user123',
-                                                            products: [
-                                                                        {
-                                                                                    productId: {
-                                                                                                _id: 'prod2',
-                                                                                                title: 'Smart Watch Series 5',
-                                                                                                images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'],
-                                                                                                price: 4999
-                                                                                    },
-                                                                                    quantity: 1,
-                                                                                    priceAtPurchase: 4999
-                                                                        }
-                                                            ],
-                                                            paymentStatus: 'paid',
-                                                            orderStatus: 'shipped',
-                                                            address: {
-                                                                        street: '456 Park Avenue',
-                                                                        city: 'Delhi',
-                                                                        state: 'Delhi',
-                                                                        pincode: '110001',
-                                                                        phone: '+91 98765 43210'
-                                                            },
-                                                            totalAmount: 4999,
-                                                            razorpayOrderId: 'order_def456',
-                                                            paymentId: 'pay_uvw456',
-                                                            createdAt: '2024-01-20T09:15:00Z',
-                                                            updatedAt: '2024-01-21T11:30:00Z'
-                                                }
-                                    ];
-                        }
+                        queryFn: getUserOrder
             });
 
             const getStatusColor = (status: string) => {
@@ -277,13 +206,13 @@ export default function OrdersPage() {
                                                                                                                                                 key={idx}
                                                                                                                                                 className="flex gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                                                                                                                                     >
-                                                                                                                                                <div className="w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                                                                                                                                                {/* <div className="w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                                                                                                                                                             <img
                                                                                                                                                                         src={item.productId.images[0]}
                                                                                                                                                                         alt={item.productId.title}
                                                                                                                                                                         className="w-full h-full object-cover"
                                                                                                                                                             />
-                                                                                                                                                </div>
+                                                                                                                                                </div> */}
                                                                                                                                                 <div className="flex-1 min-w-0">
                                                                                                                                                             <h4 className="font-semibold text-gray-900 mb-1 truncate">
                                                                                                                                                                         {item.productId.title}
@@ -301,7 +230,7 @@ export default function OrdersPage() {
 
                                                                                                             <div className="grid md:grid-cols-2 gap-6">
                                                                                                                         {/* Delivery Address */}
-                                                                                                                        <div className="space-y-3">
+                                                                                                                        {/* <div className="space-y-3">
                                                                                                                                     <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
                                                                                                                                                 <MapPin className="w-4 h-4 text-blue-600" />
                                                                                                                                                 Delivery Address
@@ -317,7 +246,7 @@ export default function OrdersPage() {
                                                                                                                                                             <p className="text-gray-900 font-medium">{order.address.phone}</p>
                                                                                                                                                 </div>
                                                                                                                                     </div>
-                                                                                                                        </div>
+                                                                                                                        </div> */}
 
                                                                                                                         {/* Payment & Total */}
                                                                                                                         <div className="space-y-3">

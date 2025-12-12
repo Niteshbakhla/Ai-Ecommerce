@@ -16,7 +16,7 @@ interface NavbarProps {
                         email?: string;
             } | null;
             cartCount?: number;
-            currentPage?: '/' | 'login' | 'register' | "admin-dashboard";
+            currentPage?: '/' | 'login' | 'register' | "admin";
             onLogoClick?: () => void;
             onCartClick?: () => void;
             onLoginClick?: () => void;
@@ -43,7 +43,7 @@ export default function Navbar({
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
             const isAuthPage = currentPage === 'login' || currentPage === 'register';
-            if (currentPage === "admin-dashboard") return null;
+            if (currentPage === "admin") return null;
 
             // Auth page navbar (login/register)
             if (isAuthPage) {
@@ -123,7 +123,7 @@ export default function Navbar({
                                                                         >
                                                                                     <ShoppingCart className="h-5 w-5 text-gray-700 group-hover:scale-110 transition-transform" />
                                                                                     {cartCount > 0 && (
-                                                                                                <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold shadow-lg animate-in zoom-in">
+                                                                                                <span className="absolute -top-1 -right-1 bg-linear-to-br from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold shadow-lg animate-in zoom-in">
                                                                                                             {cartCount > 9 ? "9+" : cartCount}
                                                                                                 </span>
                                                                                     )}
@@ -142,7 +142,7 @@ export default function Navbar({
                                                                                     <DropdownMenu>
                                                                                                 <DropdownMenuTrigger asChild>
                                                                                                             <button className="flex items-center gap-2 pl-3 pr-4 py-2 hover:bg-gray-100 rounded-full transition-all ml-2 group">
-                                                                                                                        <div className="w-8 h-8 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white text-sm font-semibold group-hover:scale-105 transition-transform">
+                                                                                                                        <div className="w-8 h-8 bg-linear-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white text-sm font-semibold group-hover:scale-105 transition-transform">
                                                                                                                                     {user.name.charAt(0).toUpperCase()}
                                                                                                                         </div>
                                                                                                                         <span className="text-sm font-medium text-gray-900 max-w-[100px] truncate">
@@ -200,7 +200,7 @@ export default function Navbar({
                                                                         >
                                                                                     <ShoppingCart className="h-5 w-5 text-gray-700" />
                                                                                     {cartCount > 0 && (
-                                                                                                <span className="absolute -top-1 -right-1 bg-gradient-to-br from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold shadow-lg">
+                                                                                                <span className="absolute -top-1 -right-1 bg-linear-to-br from-red-500 to-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold shadow-lg">
                                                                                                             {cartCount > 9 ? "9+" : cartCount}
                                                                                                 </span>
                                                                                     )}
@@ -238,7 +238,7 @@ export default function Navbar({
                                                                         ) : (
                                                                                     <>
                                                                                                 <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl mb-3">
-                                                                                                            <div className="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white font-semibold">
+                                                                                                            <div className="w-10 h-10 bg-linear-to-br from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white font-semibold">
                                                                                                                         {user.name.charAt(0).toUpperCase()}
                                                                                                             </div>
                                                                                                             <div className="flex-1 min-w-0">

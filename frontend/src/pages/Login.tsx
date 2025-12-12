@@ -31,9 +31,10 @@ export default function Login() {
                         mutationFn: loginUser,
                         onSuccess: ({ data }) => {
                                     dispatch(setCredentials({ user: data.user, accessToken: data.accessToken }))
-                                   
                                     toast.success("Login successfully! You can login now.");
-                                    navigate("/")
+                                    console.log(data)
+                                    if (data.user.role === "admin") navigate("/admin-dashboard")
+                                    else navigate("/")
                         },
                         onError: (err: any) => {
                                     toast.error(err.response?.data?.message || "Login failed");

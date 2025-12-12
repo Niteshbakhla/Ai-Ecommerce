@@ -14,6 +14,7 @@ export default function ProtectedRoute({ allowedRoles }: Props) {
             if (!user || !accessToken) {
                         return <Navigate to="/login" replace />;
             }
+            console.log(user.role)
 
             // Role check (optional)
             if (allowedRoles && !allowedRoles.includes(user.role)) {
