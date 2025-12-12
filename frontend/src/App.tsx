@@ -7,8 +7,6 @@ import ProductDetails from "./pages/ProductDetail"
 import CartPage from "./pages/Cart"
 import AdminDashboard from "./pages/admin-dashboard/AdminDashboard"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
-import { useSelector } from "react-redux"
-import type { RootState } from "./store/store"
 import OrdersPage from "./pages/Order"
 
 
