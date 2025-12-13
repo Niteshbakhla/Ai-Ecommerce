@@ -1,4 +1,5 @@
 import API from "@/api/axiosInstance";
+import { getProducts } from "@/services/product.service";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAdminOverviewQuery = () =>
@@ -6,7 +7,11 @@ export const useAdminOverviewQuery = () =>
                         queryKey: ["admin", "overview"],
                         queryFn: async () => {
                                     const res = await API.get("/admin/analytics/overview");
-                                    return res.data;
+                                    return {
+                                                revenue: res.data.totalRevenue,
+                                                orders: res.data.totalOrders,
+                                                customers: res.data.totalCustomers,
+                                    };
                         },
             });
 
@@ -45,3 +50,10 @@ export const useAdminCustomersQuery = () =>
                                     return res.data;
                         },
             });
+
+export const useProducts = (page: number, search: string) => {
+            return useQuery({
+                        queryKey: ["products", page, search],
+                        queryFn: () => getProducts(page, search),
+            });
+};
