@@ -1,5 +1,5 @@
 export type Product = {
-            id: number;
+            id: string;
             name: string;
             price: number;
             sold: number;
@@ -32,3 +32,13 @@ export type SimilarType = {
             embeddingVector: number[]; // if it exists but empty
 };
 
+
+export type ProductFormData = {
+            title: string;
+            description: string;
+            price: string;
+            images: string[]; // 👈 IMPORTANT
+            category: string;
+            stock: string;
+            isFeatured: boolean;
+};

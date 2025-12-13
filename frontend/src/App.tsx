@@ -8,11 +8,11 @@ import CartPage from "./pages/Cart"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
 import OrdersPage from "./pages/Order"
 import AdminLayout from "./components/layouts/AdminLayout"
-import DashboardPage from "./components/admin-components/Dashboard"
-import ProductsPage from "./components/admin-components/ProductPage"
-import OrderPage from "./components/admin-components/OrderPage"
-import CustomerPage from "./components/admin-components/CustomerPage"
-import AnalyticsPage from "./components/admin-components/AnalyticsPage"
+import DashboardPage from "./pages/admin-dashboard/pages/Dashboard"
+import ProductsPage from "./pages/admin-dashboard/pages/ProductPage"
+import OrderPage from "./pages/admin-dashboard/pages/OrderPage"
+import CustomerPage from "./pages/admin-dashboard/pages/CustomerPage"
+import AnalyticsPage from "./pages/admin-dashboard/pages/AnalyticsPage"
 
 
 

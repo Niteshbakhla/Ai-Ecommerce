@@ -4,6 +4,7 @@ import ProductCard from "@/components/common/ProductCard";
 import { useState } from "react";
 import SearchBar from "@/components/common/SearchBar";
 import { useDebounce } from "use-debounce";
+import { useProducts } from "@/hooks/useAdminDashboard";
 
 
 
@@ -14,17 +15,18 @@ export default function Home() {
             const [search, setSearch] = useState("");
             const [debouncedSearch] = useDebounce(search, 300);
 
-            const { data, isLoading, isError, isFetching } = useQuery({
-                        queryKey: ["products", page, debouncedSearch],
-                        queryFn: () => getProducts(page, debouncedSearch),
-            });
+            // const { data, isLoading, isError, isFetching } = useQuery({
+            //             queryKey: ["products", page, debouncedSearch],
+            //             queryFn: () => getProducts(page, debouncedSearch),
+            // });
 
+            const { data, isLoading, isError, isFetching } = useProducts(page, debouncedSearch);
 
 
             return (
                         <div>
                                     <SearchBar setSearch={setSearch} />
-                         
+
                                     {isLoading && (
                                                 <p className="text-center mt-10">Loading products...</p>
                                     )}
@@ -35,7 +37,7 @@ export default function Home() {
 
                                     {!isLoading && !isError && (
                                                 <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
-                                                            {data?.products.items?.map((p: any) => (
+                                                            {data?.map((p: any) => (
                                                                         <ProductCard key={p._id} product={p} />
                                                             ))}
                                                 </div>

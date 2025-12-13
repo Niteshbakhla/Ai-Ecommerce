@@ -3,7 +3,7 @@ import API from "../api/axiosInstance";
 
 export const getProducts = async (page: number = 1, search: string) => {
             const { data } = await API.get(`/products?page=${page}&search=${search}`);
-            return data;
+            return data.products.items;
 };
 
 // Get single product
