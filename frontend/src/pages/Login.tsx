@@ -33,7 +33,7 @@ export default function Login() {
                                     dispatch(setCredentials({ user: data.user, accessToken: data.accessToken }))
                                     toast.success("Login successfully! You can login now.");
                                     console.log(data)
-                                    if (data.user.role === "admin") navigate("/admin-dashboard")
+                                    if (data.user.role === "admin") navigate("/admin")
                                     else navigate("/")
                         },
                         onError: (err: any) => {
