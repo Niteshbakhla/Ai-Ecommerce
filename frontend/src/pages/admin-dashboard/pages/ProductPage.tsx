@@ -2,8 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { Package, X, Plus, Search, Edit2, Trash2, Star, Image as ImageIcon } from 'lucide-react';
 import type { ProductFormData, Product, SimilarType } from '@/types/adminTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createProduct, deleteProduct } from '@/api/products';
+import { createProduct, deleteProduct, updateProduct } from '@/api/products';
 import { useProducts } from '@/hooks/useAdminDashboard';
+import toast from 'react-hot-toast';
 
 
 export default function Product() {
@@ -13,6 +14,7 @@ export default function Product() {
             const [page, setPage] = useState(1);
             const [search, setSearch] = useState("");
             const queryClient = useQueryClient();
+            const [productId, setProductId] = useState("");
 
 
             const [formData, setFormData] = useState<ProductFormData>({
@@ -20,7 +22,6 @@ export default function Product() {
                         description: '',
                         price: '',
                         images: [],
-                        category: '',
                         stock: '',
                         isFeatured: false
             });
@@ -31,9 +32,8 @@ export default function Product() {
                         setFormData({
                                     title: '',
                                     description: '',
-                                    price: '',
+                                    price: "",
                                     images: [],
-                                    category: '',
                                     stock: '',
                                     isFeatured: false
                         });
@@ -42,6 +42,37 @@ export default function Product() {
                         setShowProductModal(true);
             };
 
+            type UpdateProductVars = {
+                        id: string;
+                        updateData: ProductFormData;
+            };
+
+            const addProductMutation = useMutation({
+                        mutationKey: ["add-product"],
+                        mutationFn: createProduct,
+                        onSuccess: (data) => {
+                                    toast.success(data.message)
+                                    queryClient.invalidateQueries({ queryKey: ["products"] });
+                        },
+                        onError: (data) => {
+                                    toast.error(data.message)
+                        }
+            });
+
+            const updateProductMutation = useMutation({
+                        mutationKey: ["update-product"],
+                        mutationFn: updateProduct,
+                        onSuccess: (data) => {
+                                    toast.success(data.message);
+                                    setShowProductModal(false)
+                                    queryClient.invalidateQueries({ queryKey: ["products"] });
+                        },
+                        onError: (error) => {
+                                    toast.error("Failed to update product");
+                        },
+            });
+
+
             const handleEditProduct = (product: any) => {
                         setEditingProduct(product);
                         setFormData({
@@ -49,26 +80,30 @@ export default function Product() {
                                     description: product.description,
                                     price: product.price,
                                     images: product.images,
-                                    category: product.category,
                                     stock: product.stock,
                                     isFeatured: product.isFeatured
                         });
+
                         setShowProductModal(true);
             };
 
 
             const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
                         e.preventDefault();
-                        console.log(formData)
+
+                        addProductMutation.mutate(formData)
 
                         setShowProductModal(false);
             };
 
 
-            const addProductMutation = useMutation({
-                        mutationKey: ["add-product"],
-                        mutationFn: createProduct
-            })
+            const editProduct = () => {
+                        updateProductMutation.mutate({
+                                    id: productId,
+                                    updateData: formData,
+                        });
+            }
+
 
             const deleteProductMutation = useMutation({
                         mutationFn: deleteProduct,
@@ -84,8 +119,6 @@ export default function Product() {
 
             return (
                         <div className="flex h-screen bg-gray-50">
-
-
                                     {/* Main Content */}
                                     <main className="flex-1 overflow-auto">
 
@@ -154,7 +187,7 @@ export default function Product() {
 
                                                                                                                                     <div className="flex items-center gap-2">
                                                                                                                                                 <button
-                                                                                                                                                            onClick={() => handleEditProduct(product)}
+                                                                                                                                                            onClick={() => { handleEditProduct(product), setProductId(product._id) }}
                                                                                                                                                             className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                                                                                                                                                 >
                                                                                                                                                             <Edit2 size={16} />
@@ -249,7 +282,7 @@ export default function Product() {
                                                                                                 </div>
                                                                                     </div>
 
-                                                                                    <div>
+                                                                                    {/* <div>
                                                                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
                                                                                                 <input
                                                                                                             type="text"
@@ -259,7 +292,7 @@ export default function Product() {
                                                                                                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                                                                             placeholder="e.g., Electronics, Accessories"
                                                                                                 />
-                                                                                    </div>
+                                                                                    </div> */}
 
                                                                                     <div>
                                                                                                 <label className="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
@@ -294,12 +327,23 @@ export default function Product() {
                                                                                                 >
                                                                                                             Cancel
                                                                                                 </button>
-                                                                                                <button
-                                                                                                            type="submit"
-                                                                                                            className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                                                                                                >
-                                                                                                            {editingProduct ? 'Update Product' : 'Add Product'}
-                                                                                                </button>
+
+                                                                                                {
+                                                                                                            editingProduct ? <button
+                                                                                                                        type='button'
+                                                                                                                        onClick={editProduct}
+                                                                                                                        className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                                                                                                            >
+                                                                                                                        Update Product
+                                                                                                            </button> : <button
+                                                                                                                        type="submit"
+                                                                                                                        className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                                                                                                            >
+                                                                                                                        Add Product
+                                                                                                            </button>
+                                                                                                }
+
+
                                                                                     </div>
                                                                         </form>
                                                             </div>
