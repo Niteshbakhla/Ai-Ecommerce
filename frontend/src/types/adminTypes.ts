@@ -34,11 +34,11 @@ export type SimilarType = {
 
 
 export type ProductFormData = {
+            id?: string,
             title: string;
             description: string;
             price: string;
             images: string[]; // 👈 IMPORTANT
-            category: string;
             stock: string;
             isFeatured: boolean;
 };
