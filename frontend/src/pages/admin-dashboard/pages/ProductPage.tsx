@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createProduct, deleteProduct, updateProduct } from '@/api/products';
 import { useProducts } from '@/hooks/useAdminDashboard';
 import toast from 'react-hot-toast';
+import { uploadImageToCloudinary } from "@/services/cloudinaryService"
 
 
 export default function Product() {
@@ -42,10 +43,6 @@ export default function Product() {
                         setShowProductModal(true);
             };
 
-            type UpdateProductVars = {
-                        id: string;
-                        updateData: ProductFormData;
-            };
 
             const addProductMutation = useMutation({
                         mutationKey: ["add-product"],
@@ -113,6 +110,31 @@ export default function Product() {
             })
 
             const { data, isPending } = useProducts(page, search);
+
+
+            const handleImageUpload = async (
+                        e: React.ChangeEvent<HTMLInputElement>
+            ) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        try {
+                                    toast.loading("Uploading image...");
+
+                                    const imageUrl = await uploadImageToCloudinary(file);
+
+                                    setFormData((prev) => ({
+                                                ...prev,
+                                                images: [imageUrl],
+                                    }));
+
+                                    toast.dismiss();
+                                    toast.success("Image uploaded");
+                        } catch (error) {
+                                    toast.dismiss();
+                                    toast.error("Image upload failed");
+                        }
+            };
 
 
 
@@ -295,16 +317,30 @@ export default function Product() {
                                                                                     </div> */}
 
                                                                                     <div>
-                                                                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Image URL</label>
+                                                                                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                                                                                            Product Image
+                                                                                                </label>
+
                                                                                                 <input
-                                                                                                            type="text"
-                                                                                                            value={formData.images[0] || ''}
-                                                                                                            onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
-                                                                                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                                                                            placeholder="Enter Cloudinary image URL"
+                                                                                                            type="file"
+                                                                                                            accept="image/*"
+                                                                                                            onChange={handleImageUpload}
+                                                                                                            className="w-full px-4 py-3 border border-gray-300 rounded-lg
+               file:mr-4 file:py-2 file:px-4
+               file:rounded-md file:border-0
+               file:bg-blue-50 file:text-blue-700
+               hover:file:bg-blue-100"
                                                                                                 />
-                                                                                                <p className="text-xs text-gray-500 mt-1">Enter a Cloudinary URL for the product image</p>
+
+                                                                                                {formData.images[0] && (
+                                                                                                            <img
+                                                                                                                        src={formData.images[0]}
+                                                                                                                        alt="Preview"
+                                                                                                                        className="mt-3 h-32 rounded-lg object-cover"
+                                                                                                            />
+                                                                                                )}
                                                                                     </div>
+
 
                                                                                     <div className="flex items-center gap-3">
                                                                                                 <input
@@ -342,8 +378,6 @@ export default function Product() {
                                                                                                                         Add Product
                                                                                                             </button>
                                                                                                 }
-
-
                                                                                     </div>
                                                                         </form>
                                                             </div>
