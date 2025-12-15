@@ -61,7 +61,7 @@ export default function AdminLayout() {
 
                                                 <div className="p-4 border-t border-slate-700">
                                                             <button
-                                                                        onClick={() => window.open('/', '_blank')}
+                                                                        onClick={() => navigate("/")}
                                                                         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition-colors"
                                                             >
                                                                         <Globe size={20} />
