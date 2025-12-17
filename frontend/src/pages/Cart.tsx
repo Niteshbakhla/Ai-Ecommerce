@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { getUserCarts, removeCartItem, updateCartQuantity, } from "@/services/cart.services";
+import { getUserCarts, removeCartItem, updateCartQuantity, } from "@/api/cart.services";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useState } from "react";

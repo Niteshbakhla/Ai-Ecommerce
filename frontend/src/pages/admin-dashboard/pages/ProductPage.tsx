@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createProduct, deleteProduct, updateProduct } from '@/api/products';
 import { useProducts } from '@/hooks/useAdminDashboard';
 import toast from 'react-hot-toast';
-import { uploadImageToCloudinary } from "@/services/cloudinaryService"
+import { uploadImageToCloudinary } from "@/api/cloudinary.api"
 
 
 export default function Product() {

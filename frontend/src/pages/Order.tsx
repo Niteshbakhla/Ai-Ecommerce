@@ -17,7 +17,7 @@ import {
             Download,
             AlertCircle
 } from 'lucide-react';
-import { getUserOrder } from '@/api/order';
+import { getUserOrder } from '@/api/order.api';
 
 interface IOrderProduct {
             productId: {

@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProductById, getSimilarProducts } from "@/services/product.service";
+import { getProductById, getSimilarProducts } from "@/api/product.api";
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart, Truck, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { addToCartProduct } from "@/services/cart.services";
+import { addToCartProduct } from "@/api/cart.services";
 import toast from "react-hot-toast";
-import { addOrUpdateReview, deleteReview, getReviews } from "@/services/review.service";
+import { addOrUpdateReview, deleteReview, getReviews } from "@/api/review.api";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import SimilarProducts from "@/components/common/SimilarProducts";
@@ -275,8 +275,8 @@ export default function ProductDetails() {
 
                                                 {/* Add Review Form (only if logged in) */}
                                                 {user && (
-                                                            
-                                                <ReviewForm addReviewMutation={addReviewMutation} />
+
+                                                            <ReviewForm addReviewMutation={addReviewMutation} />
                                                 )}
 
                                     </div>

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "../../store/store"
 import { logout } from "@/store/slices/authSlices";
 import { useQuery } from "@tanstack/react-query";
-import { getUserCarts } from "@/services/cart.services";
+import { getUserCarts } from "@/api/cart.services";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 
