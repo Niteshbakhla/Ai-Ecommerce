@@ -1,19 +1,37 @@
-import { useAdminOverviewQuery } from '@/hooks/useAdminDashboard';
+import { useAdminOverviewQuery, useAdminTopProductsQuery } from '@/hooks/useAdminDashboard';
+
+interface TopProduct {
+            product: {
+                        _id: string,
+                        title: string;
+                        price: number;
+                        description: string
+                        stock: number,
+
+
+            };
+            totalQuantity: number;
+            totalRevenue: number
+}
 
 
 
 const DashboardPage = () => {
 
             const { data, isLoading, isError } = useAdminOverviewQuery();
+            const { data: rawTopProduct } = useAdminTopProductsQuery();
+            const topProduct: TopProduct[] = rawTopProduct ?? [];
 
 
+
+            console.log(topProduct)
             if (isLoading) return <div>Loading dashboard...</div>;
             if (isError) return <div>Failed to load dashboard</div>;
             const stats = [
                         { label: 'Total Revenue', value: data?.revenue, change: '+12.5%', positive: true },
                         { label: 'Orders', value: data?.orders, change: '+8.2%', positive: true },
                         { label: 'Customers', value: data?.customers, change: '+23.1%', positive: true },
-                        { label: 'Products', value: '156', change: '-2.4%', positive: false },
+                        { label: 'Products', value: topProduct?.length, change: '-2.4%', positive: false },
             ]
 
 
@@ -54,13 +72,13 @@ const DashboardPage = () => {
                                                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                                                             <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Products</h3>
                                                             <div className="space-y-4">
-                                                                        {['Wireless Headphones', 'Smart Watch', 'Laptop Stand', 'USB-C Cable'].map((product, i) => (
+                                                                        {topProduct && topProduct.map(({ product, totalQuantity }, i) => (
                                                                                     <div key={i} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
                                                                                                 <div>
-                                                                                                            <p className="font-medium text-gray-800">{product}</p>
-                                                                                                            <p className="text-sm text-gray-500">{(150 - i * 20)} units sold</p>
+                                                                                                            <p className="font-medium text-gray-800">{product.title}</p>
+                                                                                                            <p className="text-sm text-gray-500"> {totalQuantity} unit sold</p>
                                                                                                 </div>
-                                                                                                <span className="text-blue-600 font-semibold">${(99 - i * 10)}</span>
+                                                                                                <span className="text-blue-600 font-semibold">${product.price}</span>
                                                                                     </div>
                                                                         ))}
                                                             </div>
