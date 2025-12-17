@@ -4,7 +4,7 @@ import { Heart, LucideTrash2, Trash, Trash2, Trash2Icon, TrashIcon } from "lucid
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addToCartProduct, getUserCarts, removeCartItem } from "@/services/cart.services";
+import { addToCartProduct, getUserCarts, removeCartItem } from "@/api/cart.services";
 import toast from "react-hot-toast";
 
 interface Props {
