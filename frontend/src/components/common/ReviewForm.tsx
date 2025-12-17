@@ -27,7 +27,7 @@ export default function ReviewForm({ addReviewMutation }: ReviewFormProps) {
             };
 
             return (
-                        <div className="max-w-2xl mx-auto p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg">
+                        <div className="max-w-2xl mx-auto p-8 bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg">
                                     <h3 className="text-2xl font-bold text-gray-900 mb-6">Write a Review</h3>
 
                                     <div className="space-y-6">
@@ -81,7 +81,7 @@ export default function ReviewForm({ addReviewMutation }: ReviewFormProps) {
                                                 <button
                                                             onClick={handleSubmit}
                                                             disabled={rating === 0 || !comment.trim()}
-                                                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:from-blue-700 hover:to-indigo-700"
+                                                            className="w-full bg-linear-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:from-blue-700 hover:to-indigo-700"
                                                 >
                                                             Submit Review
                                                 </button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -7,15 +7,11 @@ import {
             CheckCircle,
             XCircle,
             Clock,
-            MapPin,
-            Phone,
             CreditCard,
             Calendar,
             ShoppingBag,
-            ChevronRight,
             Eye,
             Download,
-            AlertCircle
 } from 'lucide-react';
 import { getUserOrder } from '@/api/order.api';
 
@@ -54,7 +50,7 @@ export default function OrdersPage() {
             const navigate = useNavigate();
             const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-      
+
 
             // Fetch orders - replace with your API call
             const { data: orders, isLoading } = useQuery<IOrder[]>({
@@ -90,7 +86,7 @@ export default function OrdersPage() {
 
             if (isLoading) {
                         return (
-                                    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                                    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center">
                                                 <div className="text-center space-y-4">
                                                             <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
                                                             <p className="text-gray-600 font-medium">Loading your orders...</p>
@@ -100,7 +96,7 @@ export default function OrdersPage() {
             }
 
             return (
-                        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+                        <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-50">
                                     {/* Header */}
                                     <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
                                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -124,7 +120,7 @@ export default function OrdersPage() {
                                                                                                 key={status}
                                                                                                 onClick={() => setSelectedStatus(status)}
                                                                                                 className={`px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-all ${selectedStatus === status
-                                                                                                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
+                                                                                                            ? 'bg-linear-to-r from-blue-600 to-indigo-600 text-white shadow-lg'
                                                                                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                                                                                             }`}
                                                                                     >
@@ -150,7 +146,7 @@ export default function OrdersPage() {
                                                                         </p>
                                                                         <button
                                                                                     onClick={() => navigate('/products')}
-                                                                                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+                                                                                    className="bg-linear-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
                                                                         >
                                                                                     Start Shopping
                                                                         </button>
@@ -163,7 +159,7 @@ export default function OrdersPage() {
                                                                                                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all"
                                                                                     >
                                                                                                 {/* Order Header */}
-                                                                                                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-200">
+                                                                                                <div className="bg-linear-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-200">
                                                                                                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                                                                                                         <div className="space-y-2">
                                                                                                                                     <div className="flex items-center gap-3">
@@ -254,7 +250,7 @@ export default function OrdersPage() {
                                                                                                                                                 <CreditCard className="w-4 h-4 text-blue-600" />
                                                                                                                                                 Payment Details
                                                                                                                                     </div>
-                                                                                                                                    <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl space-y-3">
+                                                                                                                                    <div className="p-4 bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl space-y-3">
                                                                                                                                                 {order.paymentId && (
                                                                                                                                                             <div className="flex justify-between text-sm">
                                                                                                                                                                         <span className="text-gray-600">Payment ID:</span>
@@ -289,7 +285,7 @@ export default function OrdersPage() {
                                                                                                                         <Eye className="w-4 h-4" />
                                                                                                                         View Details
                                                                                                             </button>
-                                                                                                            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all">
+                                                                                                            <button className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all">
                                                                                                                         <Download className="w-4 h-4" />
                                                                                                                         Download Invoice
                                                                                                             </button>

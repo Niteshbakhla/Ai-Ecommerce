@@ -6,7 +6,7 @@ import { Heart, ShoppingCart, Truck, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { addToCartProduct } from "@/api/cart.services";
 import toast from "react-hot-toast";
-import { addOrUpdateReview, deleteReview, getReviews } from "@/api/review.api";
+import { addOrUpdateReview, deleteReview } from "@/api/review.api";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import SimilarProducts from "@/components/common/SimilarProducts";
