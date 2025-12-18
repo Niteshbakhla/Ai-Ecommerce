@@ -8,7 +8,6 @@ export default function OrdersPage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
 
-  // const [orders, setOrders] = useState<Order[]>([... ]);
 
 
   // Sample orders data
