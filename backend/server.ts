@@ -5,12 +5,9 @@ import logger from "./src/utils/logger";
 
 const { PORT } = config
 
-
 async function startServer() {
             try {
                         await connectDB();
-
-
                         app.listen(PORT, () => {
                                     logger.info(`Server running on http://localhost:${PORT}`);
                         });

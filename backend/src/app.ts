@@ -5,11 +5,12 @@ import router from "./routes/index";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler";
 import cors from "cors";
+import config from "./config/config";
 
 const app = express();
 
 app.use(cors({
-            origin: "http://localhost:5173",
+            origin: config.CLIENT_URL,
             credentials: true
 }))
 
