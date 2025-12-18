@@ -24,7 +24,6 @@ const DashboardPage = () => {
 
 
 
-            console.log(topProduct)
             if (isLoading) return <div>Loading dashboard...</div>;
             if (isError) return <div>Failed to load dashboard</div>;
             const stats = [

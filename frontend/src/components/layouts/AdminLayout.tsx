@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Globe, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Globe, Menu, X, NotebookPen } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
 
 export default function AdminLayout() {
             const [activeTab, setActiveTab] = useState('dashboard');
@@ -16,14 +17,10 @@ export default function AdminLayout() {
                         { id: 'orders', label: 'Orders', icon: ShoppingCart, path: '/admin/orders' },
                         { id: 'customers', label: 'Customers', icon: Users, path: '/admin/customers' },
                         { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/admin/analytics' },
+                        { id: 'inventory', label: 'Inventory', icon: NotebookPen, path: '/admin/inventory' },
             ];
 
-            const stats = [
-                        { label: 'Total Revenue', value: '$45,231', change: '+12.5%', positive: true },
-                        { label: 'Orders', value: '1,234', change: '+8.2%', positive: true },
-                        { label: 'Customers', value: '892', change: '+23.1%', positive: true },
-                        { label: 'Products', value: '156', change: '-2.4%', positive: false },
-            ];
+        
 
             return (
                         < div className="flex h-[95vh]  bg-gray-50" >

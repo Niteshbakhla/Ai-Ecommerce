@@ -13,6 +13,7 @@ import ProductsPage from "./pages/admin-dashboard/pages/ProductPage"
 import OrderPage from "./pages/admin-dashboard/pages/OrderPage"
 import CustomerPage from "./pages/admin-dashboard/pages/CustomerPage"
 import AnalyticsPage from "./pages/admin-dashboard/pages/AnalyticsPage"
+import AdminInventory from "./pages/admin-dashboard/pages/Inventory"
 
 
 
@@ -48,6 +49,7 @@ const App = () => {
                 <Route path="orders" element={<OrderPage />} />
                 <Route path="customers" element={<CustomerPage />} />
                 <Route path="analytics" element={<AnalyticsPage />} />
+                <Route path="inventory" element={<AdminInventory />} />
 
               </Route>
             </Route>
