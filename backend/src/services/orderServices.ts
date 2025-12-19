@@ -54,7 +54,7 @@ export const createCheckoutOrder = async (userId: string, address: AddressInput)
 }
 
 
-export const verifyAndFinalizeOrder = async (userId: string , data: any) => {
+export const verifyAndFinalizeOrder = async (userId: string, data: any) => {
             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = data;
             console.log(data)
             // Step 1: Verify signature
@@ -120,3 +120,8 @@ export const getUserOrders = async (userId: string) => {
 export const getOrderById = async (id: string, userId: string) => {
             return Order.findOne({ _id: id, userId }).populate("products.productId");
 };
+
+
+export const getOrdersForAdmin = async (filters = {}) => {
+            return Order.find(filters).populate("userId", "name email").sort({ createdAt: -1 });
+}

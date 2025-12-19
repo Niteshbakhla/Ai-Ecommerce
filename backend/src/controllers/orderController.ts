@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../middleware/auth";
 import { asyncHandler } from "../utils/asyncHandler";
-import { createCheckoutOrder, getOrderById, getUserOrders, verifyAndFinalizeOrder } from "../services/orderServices";
+import { createCheckoutOrder, getOrderById, getOrdersForAdmin, getUserOrders, verifyAndFinalizeOrder } from "../services/orderServices";
 import AppError from "../utils/customError";
 
 
@@ -50,5 +50,13 @@ export const getUserOrderController = asyncHandler(
             async (req: AuthRequest, res: Response, next: NextFunction) => {
                         const orders = await getUserOrders(req.user?.id);
                         res.status(200).json(orders)
+            }
+)
+
+export const getOrderForAdmin = asyncHandler(
+            async (req: AuthRequest, res: Response, next: NextFunction) => {
+                        console.log("hey getting orders request")
+                        const orders = await getOrdersForAdmin();
+                        res.status(200).json(orders);
             }
 )
