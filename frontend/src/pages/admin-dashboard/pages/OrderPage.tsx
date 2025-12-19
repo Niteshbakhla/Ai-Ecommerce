@@ -1,208 +1,166 @@
 import { useState } from 'react';
-import { Search, ShoppingCart, X } from 'lucide-react';
-import type { FilterStatus, Order, OrderStatus, PaymentStatus } from '@/types/orderTypes';
+import { Search, ShoppingCart, X, Package, Loader2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { getOrderForAdmin } from '@/api/order.api';
+
+type FilterStatus = 'all' | 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
+interface Product {
+  productId: string;
+  quantity: number;
+  priceAtPurchase: number;
+  _id: string;
+}
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+interface OrderData {
+  _id: string;
+  userId: User;
+  products: Product[];
+  totalAmount: number;
+  orderStatus: string;
+  paymentStatus: string;
+  paymentId: string;
+  razorpayOrderId: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export default function OrdersPage() {
   const [showOrderDetails, setShowOrderDetails] = useState<boolean>(false);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderData | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
 
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["admin-order"],
+    queryFn: getOrderForAdmin
+  });
 
-
-  // Sample orders data
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      _id: 'ORD-001',
-      orderNumber: 'ORD-001',
-      customer: {
-        name: 'John Doe',
-        email: 'john.doe@email.com',
-        phone: '+1 234 567 8900'
-      },
-      items: [
-        { productName: 'Wireless Headphones', quantity: 1, price: 299.99 },
-        { productName: 'Laptop Stand', quantity: 2, price: 49.99 }
-      ],
-      totalAmount: 399.97,
-      status: 'delivered',
-      paymentStatus: 'paid',
-      paymentMethod: 'Credit Card',
-      shippingAddress: '123 Main St, New York, NY 10001',
-      createdAt: '2024-12-10T10:30:00',
-      deliveredAt: '2024-12-12T14:20:00'
-    },
-    {
-      _id: 'ORD-002',
-      orderNumber: 'ORD-002',
-      customer: {
-        name: 'Sarah Smith',
-        email: 'sarah.smith@email.com',
-        phone: '+1 234 567 8901'
-      },
-      items: [
-        { productName: 'Smart Watch', quantity: 1, price: 199.99 }
-      ],
-      totalAmount: 199.99,
-      status: 'shipped',
-      paymentStatus: 'paid',
-      paymentMethod: 'PayPal',
-      shippingAddress: '456 Oak Ave, Los Angeles, CA 90001',
-      createdAt: '2024-12-11T15:45:00',
-      shippedAt: '2024-12-12T09:00:00'
-    },
-    {
-      _id: 'ORD-003',
-      orderNumber: 'ORD-003',
-      customer: {
-        name: 'Michael Johnson',
-        email: 'michael.j@email.com',
-        phone: '+1 234 567 8902'
-      },
-      items: [
-        { productName: 'Wireless Headphones', quantity: 1, price: 299.99 },
-        { productName: 'Smart Watch', quantity: 1, price: 199.99 }
-      ],
-      totalAmount: 499.98,
-      status: 'processing',
-      paymentStatus: 'paid',
-      paymentMethod: 'Credit Card',
-      shippingAddress: '789 Pine Rd, Chicago, IL 60601',
-      createdAt: '2024-12-13T08:15:00'
-    },
-    {
-      _id: 'ORD-004',
-      orderNumber: 'ORD-004',
-      customer: {
-        name: 'Emily Davis',
-        email: 'emily.davis@email.com',
-        phone: '+1 234 567 8903'
-      },
-      items: [
-        { productName: 'Laptop Stand', quantity: 3, price: 49.99 }
-      ],
-      totalAmount: 149.97,
-      status: 'pending',
-      paymentStatus: 'pending',
-      paymentMethod: 'Bank Transfer',
-      shippingAddress: '321 Elm St, Miami, FL 33101',
-      createdAt: '2024-12-13T11:00:00'
-    },
-    {
-      _id: 'ORD-005',
-      orderNumber: 'ORD-005',
-      customer: {
-        name: 'David Wilson',
-        email: 'david.wilson@email.com',
-        phone: '+1 234 567 8904'
-      },
-      items: [
-        { productName: 'Smart Watch', quantity: 2, price: 199.99 }
-      ],
-      totalAmount: 399.98,
-      status: 'cancelled',
-      paymentStatus: 'refunded',
-      paymentMethod: 'Credit Card',
-      shippingAddress: '654 Maple Dr, Seattle, WA 98101',
-      createdAt: '2024-12-09T16:30:00',
-      cancelledAt: '2024-12-10T10:00:00'
-    },
-    {
-      _id: 'ORD-006',
-      orderNumber: 'ORD-006',
-      customer: {
-        name: 'Lisa Anderson',
-        email: 'lisa.a@email.com',
-        phone: '+1 234 567 8905'
-      },
-      items: [
-        { productName: 'Wireless Headphones', quantity: 1, price: 299.99 }
-      ],
-      totalAmount: 299.99,
-      status: 'shipped',
-      paymentStatus: 'paid',
-      paymentMethod: 'Credit Card',
-      shippingAddress: '987 Cedar Ln, Boston, MA 02101',
-      createdAt: '2024-12-12T14:20:00',
-      shippedAt: '2024-12-13T10:30:00'
-    }
-  ]);
-
-  const handleUpdateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
-    setOrders(prev =>
-      prev.map(order =>
-        order._id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-    setShowOrderDetails(false);
-  };
-
-  const handleViewOrderDetails = (order: Order) => {
+  const handleViewOrderDetails = (order: OrderData) => {
     setSelectedOrder(order);
     setShowOrderDetails(true);
   };
-  const getStatusColor = (status: OrderStatus) => {
-    const colors: Record<OrderStatus, string> = {
+
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
       pending: 'bg-yellow-100 text-yellow-700',
       processing: 'bg-blue-100 text-blue-700',
       shipped: 'bg-purple-100 text-purple-700',
       delivered: 'bg-green-100 text-green-700',
       cancelled: 'bg-red-100 text-red-700',
     };
-    return colors[status];
+    return colors[status] || 'bg-gray-100 text-gray-700';
   };
 
-
-  const getPaymentStatusColor = (status: PaymentStatus) => {
-    const colors = {
+  const getPaymentStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
       paid: 'bg-green-100 text-green-700',
       pending: 'bg-yellow-100 text-yellow-700',
-      refunded: 'bg-red-100 text-red-700'
+      failed: 'bg-red-100 text-red-700',
+      refunded: 'bg-orange-100 text-orange-700'
     };
     return colors[status] || 'bg-gray-100 text-gray-700';
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
-  const filteredOrders = orders.filter((order) => {
+  const filteredOrders = data?.filter((order: OrderData) => {
     const matchesSearch =
-      order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customer.email.toLowerCase().includes(searchQuery.toLowerCase());
+      order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.userId.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.userId.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.razorpayOrderId.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+    const matchesStatus = filterStatus === 'all' || order.orderStatus === filterStatus;
 
     return matchesSearch && matchesStatus;
-  });
+  }) || [];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600 text-lg">Loading orders...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <X className="w-12 h-12 text-red-600 mx-auto mb-4" />
+          <p className="text-red-600 text-lg">Failed to load orders</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2">
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          {/* <h1 className="text-4xl font-bold text-gray-800 mb-2">Orders Management</h1> */}
-          <p className="text-gray-600">View and manage all customer orders</p>
+      
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600 mb-1">Total Orders</p>
+            <p className="text-2xl font-bold text-gray-900">{data?.length || 0}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600 mb-1">Pending</p>
+            <p className="text-2xl font-bold text-yellow-600">
+              {data?.filter((o: OrderData) => o.orderStatus === 'pending').length || 0}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600 mb-1">Delivered</p>
+            <p className="text-2xl font-bold text-green-600">
+              {data?.filter((o: OrderData) => o.orderStatus === 'delivered').length || 0}
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600 mb-1">Revenue</p>
+            <p className="text-2xl font-bold text-blue-600">
+              ₹{data?.reduce((sum: number, o: OrderData) => sum + o.totalAmount, 0).toFixed(2) || 0}
+            </p>
+          </div>
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-6">
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="text"
-              placeholder="Search orders by order number, customer name or email..."
+              placeholder="Search by order ID, customer name, email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-            className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white font-medium"
+            className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white font-medium"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -214,14 +172,15 @@ export default function OrdersPage() {
         </div>
 
         {/* Orders Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order ID</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Customer</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Items</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment</th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
@@ -229,22 +188,29 @@ export default function OrdersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredOrders.map((order) => (
+                {filteredOrders.map((order: OrderData) => (
                   <tr key={order._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-800">{order.orderNumber}</div>
-                      <div className="text-sm text-gray-500">{order.items.length} item(s)</div>
+                      <div className="font-mono text-sm text-gray-800">{order._id.slice(-8)}</div>
+                      <div className="text-xs text-gray-500">{order.razorpayOrderId}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-800">{order.customer.name}</div>
-                      <div className="text-sm text-gray-500">{order.customer.email}</div>
+                      <div className="font-medium text-gray-800">{order.userId.name}</div>
+                      <div className="text-sm text-gray-500">{order.userId.email}</div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-800">{formatDate(order.createdAt)}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-800">${order.totalAmount.toFixed(2)}</div>
-                      <div className="text-xs text-gray-500">{order.paymentMethod}</div>
+                      <div className="flex items-center gap-2">
+                        <Package className="w-4 h-4 text-gray-400" />
+                        <span className="text-sm font-medium text-gray-800">
+                          {order.products.reduce((sum, p) => sum + p.quantity, 0)} item(s)
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="font-semibold text-gray-800">₹{order.totalAmount.toFixed(2)}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPaymentStatusColor(order.paymentStatus)}`}>
@@ -252,14 +218,14 @@ export default function OrdersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.orderStatus)}`}>
+                        {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <button
                         onClick={() => handleViewOrderDetails(order)}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+                        className="text-blue-600 hover:text-blue-700 font-medium text-sm hover:underline"
                       >
                         View Details
                       </button>
@@ -295,14 +261,22 @@ export default function OrdersPage() {
 
             <div className="p-6 space-y-6">
               {/* Order Info */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-sm font-semibold text-gray-500 mb-1">Order Number</p>
-                  <p className="text-lg font-bold text-gray-800">{selectedOrder.orderNumber}</p>
+                  <p className="text-sm font-semibold text-gray-500 mb-1">Order ID</p>
+                  <p className="text-lg font-mono text-gray-800">{selectedOrder._id}</p>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-500 mb-1">Order Date</p>
                   <p className="text-lg font-medium text-gray-800">{formatDate(selectedOrder.createdAt)}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-500 mb-1">Razorpay Order ID</p>
+                  <p className="text-sm font-mono text-gray-800">{selectedOrder.razorpayOrderId}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-500 mb-1">Payment ID</p>
+                  <p className="text-sm font-mono text-gray-800">{selectedOrder.paymentId}</p>
                 </div>
               </div>
 
@@ -310,10 +284,9 @@ export default function OrdersPage() {
               <div className="bg-gray-50 rounded-xl p-5">
                 <h4 className="font-semibold text-gray-800 mb-3">Customer Information</h4>
                 <div className="space-y-2">
-                  <p className="text-gray-700"><span className="font-medium">Name:</span> {selectedOrder.customer.name}</p>
-                  <p className="text-gray-700"><span className="font-medium">Email:</span> {selectedOrder.customer.email}</p>
-                  <p className="text-gray-700"><span className="font-medium">Phone:</span> {selectedOrder.customer.phone}</p>
-                  <p className="text-gray-700"><span className="font-medium">Address:</span> {selectedOrder.shippingAddress}</p>
+                  <p className="text-gray-700"><span className="font-medium">Name:</span> {selectedOrder.userId.name}</p>
+                  <p className="text-gray-700"><span className="font-medium">Email:</span> {selectedOrder.userId.email}</p>
+                  <p className="text-gray-700"><span className="font-medium">Customer ID:</span> {selectedOrder.userId._id}</p>
                 </div>
               </div>
 
@@ -321,20 +294,21 @@ export default function OrdersPage() {
               <div>
                 <h4 className="font-semibold text-gray-800 mb-3">Order Items</h4>
                 <div className="space-y-3">
-                  {selectedOrder.items.map((item, index) => (
-                    <div key={index} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  {selectedOrder.products.map((item, index) => (
+                    <div key={item._id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                       <div>
-                        <p className="font-medium text-gray-800">{item.productName}</p>
+                        <p className="font-medium text-gray-800">Product ID: {item.productId}</p>
                         <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                        <p className="text-sm text-gray-500">Price: ₹{item.priceAtPurchase}</p>
                       </div>
-                      <p className="font-semibold text-gray-800">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold text-gray-800">₹{(item.priceAtPurchase * item.quantity).toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Payment & Status */}
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm font-semibold text-gray-500 mb-2">Payment Status</p>
                   <span className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${getPaymentStatusColor(selectedOrder.paymentStatus)}`}>
@@ -343,8 +317,8 @@ export default function OrdersPage() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-500 mb-2">Order Status</p>
-                  <span className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${getStatusColor(selectedOrder.status)}`}>
-                    {selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}
+                  <span className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${getStatusColor(selectedOrder.orderStatus)}`}>
+                    {selectedOrder.orderStatus.charAt(0).toUpperCase() + selectedOrder.orderStatus.slice(1)}
                   </span>
                 </div>
               </div>
@@ -353,48 +327,9 @@ export default function OrdersPage() {
               <div className="border-t border-gray-200 pt-4">
                 <div className="flex justify-between items-center">
                   <p className="text-lg font-semibold text-gray-800">Total Amount</p>
-                  <p className="text-2xl font-bold text-blue-600">${selectedOrder.totalAmount.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-blue-600">₹{selectedOrder.totalAmount.toFixed(2)}</p>
                 </div>
               </div>
-
-              {/* Update Status */}
-              {selectedOrder.status !== 'delivered' && selectedOrder.status !== 'cancelled' && (
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-3">Update Order Status</p>
-                  <div className="flex gap-2 flex-wrap">
-                    {selectedOrder.status === 'pending' && (
-                      <button
-                        onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'processing')}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                      >
-                        Mark as Processing
-                      </button>
-                    )}
-                    {selectedOrder.status === 'processing' && (
-                      <button
-                        onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'shipped')}
-                        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
-                      >
-                        Mark as Shipped
-                      </button>
-                    )}
-                    {selectedOrder.status === 'shipped' && (
-                      <button
-                        onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'delivered')}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-                      >
-                        Mark as Delivered
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'cancelled')}
-                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                    >
-                      Cancel Order
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
