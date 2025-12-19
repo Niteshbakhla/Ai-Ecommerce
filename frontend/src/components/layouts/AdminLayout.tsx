@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Globe, Menu, X, NotebookPen } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store/store';
 
 
 export default function AdminLayout() {
@@ -8,6 +10,10 @@ export default function AdminLayout() {
             const [sidebarOpen, setSidebarOpen] = useState(true);
             const navigate = useNavigate();
             const location = useLocation();
+
+            const user = useSelector((state: RootState) => state.auth.user);
+
+
 
 
 
@@ -20,7 +26,7 @@ export default function AdminLayout() {
                         { id: 'inventory', label: 'Inventory', icon: NotebookPen, path: '/admin/inventory' },
             ];
 
-        
+
 
             return (
                         < div className="flex h-[95vh]  bg-gray-50" >
@@ -80,11 +86,11 @@ export default function AdminLayout() {
                                                                         </div>
                                                                         <div className="flex items-center gap-4">
                                                                                     <div className="text-right">
-                                                                                                <p className="text-sm font-medium text-gray-700">Admin User</p>
-                                                                                                <p className="text-xs text-gray-500">admin@company.com</p>
+                                                                                                <p className="text-sm font-medium text-gray-700">{user?.name}</p>
+                                                                                                <p className="text-xs text-gray-500">{user?.email}</p>
                                                                                     </div>
                                                                                     <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold">
-                                                                                                A
+                                                                                                {user?.name.slice(0, 1).toUpperCase()}
                                                                                     </div>
                                                                         </div>
                                                             </div>
