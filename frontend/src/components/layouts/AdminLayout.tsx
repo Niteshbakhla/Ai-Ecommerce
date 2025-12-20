@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Globe, Menu, X, NotebookPen } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, BarChart3, Globe, Menu, X, NotebookPen, LogOut } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
@@ -31,7 +31,7 @@ export default function AdminLayout() {
             return (
                         < div className="flex h-[95vh]  bg-gray-50" >
                                     {/* Sidebar */}
-                                    <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-slate-900 text-white transition-all duration-300 flex flex-col`
+                                    <aside className={`${sidebarOpen ? 'w-64' : 'w-20'} bg-slate-900 text-white transition-transform duration-300 flex flex-col`
                                     }>
                                                 <div className="p-6 flex items-center justify-between border-b border-slate-700">
                                                             {sidebarOpen && <h1 className="text-xl font-bold">Admin Panel</h1>}
@@ -62,13 +62,21 @@ export default function AdminLayout() {
                                                             })}
                                                 </nav>
 
+
                                                 <div className="p-4 border-t border-slate-700">
                                                             <button
                                                                         onClick={() => navigate("/")}
                                                                         className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition-colors"
                                                             >
                                                                         <Globe size={20} />
-                                                                        {sidebarOpen && <span className="font-medium">Go to Website →</span>}
+                                                                        <span className={`font-medium ${sidebarOpen ? "" : "w-20"} `}>Go to Website →</span>
+                                                                        {/* {sidebarOpen && <span className={`font-medium `}>Go to Website →</span>} */}
+                                                            </button>
+                                                            <button
+                                                                        className="w-full flex items-center gap-3  px-4 py-3 rounded-lg text-gray-300 hover:bg-slate-800 transition-colors"
+                                                            >
+                                                                        <LogOut size={20} />
+                                                                        {sidebarOpen && <span className="font-medium">Log out </span>}
                                                             </button>
                                                 </div>
                                     </aside >
