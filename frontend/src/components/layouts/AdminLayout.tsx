@@ -16,8 +16,9 @@ import {
             ChevronDown
 } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '@/store/store';
+import { logout } from '@/store/slices/authSlices';
 
 export default function AdminLayout() {
             const [activeTab, setActiveTab] = useState('dashboard');
@@ -25,8 +26,10 @@ export default function AdminLayout() {
             const [showUserMenu, setShowUserMenu] = useState(false);
             const navigate = useNavigate();
             const location = useLocation();
+            const dispatch = useDispatch();
 
             const user = useSelector((state: RootState) => state.auth.user);
+
 
             const navItems = [
                         { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
@@ -39,8 +42,8 @@ export default function AdminLayout() {
 
             const handleLogout = () => {
                         if (confirm('Are you sure you want to log out?')) {
-                                    // Your logout logic here
-                                    console.log('Logging out...');
+                                    dispatch(logout());   // 👈 correct Redux logout
+                                    navigate("/login");
                         }
             };
 
