@@ -1,5 +1,6 @@
 import API from "@/api/axiosInstance";
 import { getProducts } from "@/api/product.api";
+import type { CustomerData } from "@/types/adminTypes";
 import { useQuery } from "@tanstack/react-query";
 
 export const useAdminOverviewQuery = () =>
@@ -44,7 +45,7 @@ export const useAdminInventoryQuery = () =>
             });
 
 export const useAdminCustomersQuery = () =>
-            useQuery({
+            useQuery<CustomerData[]>({
                         queryKey: ["admin", "customers"],
                         queryFn: async () => {
                                     const res = await API.get("/admin/analytics/customers");

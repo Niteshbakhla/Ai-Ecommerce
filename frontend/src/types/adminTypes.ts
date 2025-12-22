@@ -42,3 +42,15 @@ export type ProductFormData = {
             stock: string;
             isFeatured: boolean;
 };
+
+
+export interface CustomerData {
+            _id: string;
+            totalSpent: number;
+            orderCount: number;
+            user: {
+                        name: string;
+                        email: string;
+            };
+}
+
