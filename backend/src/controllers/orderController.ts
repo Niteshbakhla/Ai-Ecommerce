@@ -55,7 +55,6 @@ export const getUserOrderController = asyncHandler(
 
 export const getOrderForAdmin = asyncHandler(
             async (req: AuthRequest, res: Response, next: NextFunction) => {
-                        console.log("hey getting orders request")
                         const orders = await getOrdersForAdmin();
                         res.status(200).json(orders);
             }
