@@ -43,7 +43,7 @@ export default function Navbar({
             const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
             const isAuthPage = currentPage === 'login' || currentPage === 'register';
-            if (currentPage === "admin") return null;
+            if (currentPage === "admin" || currentPage === "login" || currentPage === "register") return null;
 
             // Auth page navbar (login/register)
             if (isAuthPage) {
