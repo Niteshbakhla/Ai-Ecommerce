@@ -1,34 +1,36 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Register from "./pages/Register"
-import Login from "./pages/Login"
+import { lazy, Suspense } from "react"
+
 import Layout from "./components/layouts/Layout"
-import Home from "./pages/Home"
-import ProductDetails from "./pages/ProductDetail"
-import CartPage from "./pages/Cart"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
-import OrdersPage from "./pages/Order"
 import AdminLayout from "./components/layouts/AdminLayout"
-import DashboardPage from "./pages/admin-dashboard/pages/Dashboard"
-import ProductsPage from "./pages/admin-dashboard/pages/ProductPage"
-import OrderPage from "./pages/admin-dashboard/pages/OrderPage"
-import CustomerPage from "./pages/admin-dashboard/pages/CustomerPage"
-import AnalyticsPage from "./pages/admin-dashboard/pages/AnalyticsPage"
-import AdminInventory from "./pages/admin-dashboard/pages/Inventory"
 
+// Public
+const Register = lazy(() => import("./pages/Register"))
+const Login = lazy(() => import("./pages/Login"))
 
+// User
+const Home = lazy(() => import("./pages/Home"))
+const ProductDetails = lazy(() => import("./pages/ProductDetail"))
+const CartPage = lazy(() => import("./pages/Cart"))
+const OrdersPage = lazy(() => import("./pages/Order"))
 
+// Admin
+const DashboardPage = lazy(() => import("./pages/admin-dashboard/pages/Dashboard"))
+const ProductsPage = lazy(() => import("./pages/admin-dashboard/pages/ProductPage"))
+const OrderPage = lazy(() => import("./pages/admin-dashboard/pages/OrderPage"))
+const CustomerPage = lazy(() => import("./pages/admin-dashboard/pages/CustomerPage"))
+const AnalyticsPage = lazy(() => import("./pages/admin-dashboard/pages/AnalyticsPage"))
+const AdminInventory = lazy(() => import("./pages/admin-dashboard/pages/Inventory"))
 
 const App = () => {
-
-
-
   return (
-    <div>
-      <BrowserRouter>
-        <Layout>
+    <BrowserRouter>
+      <Layout>
+        <Suspense fallback={<div>Loading...</div>}>
           <Routes>
 
-            {/* Pubic */}
+            {/* Public */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
 
@@ -40,26 +42,23 @@ const App = () => {
               <Route path="/orders" element={<OrdersPage />} />
             </Route>
 
-            {/* Admin Only */}
+            {/* Admin */}
             <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
               <Route path="/admin" element={<AdminLayout />}>
-
                 <Route index element={<DashboardPage />} />
                 <Route path="products" element={<ProductsPage />} />
                 <Route path="orders" element={<OrderPage />} />
                 <Route path="customers" element={<CustomerPage />} />
                 <Route path="analytics" element={<AnalyticsPage />} />
                 <Route path="inventory" element={<AdminInventory />} />
-
               </Route>
             </Route>
 
           </Routes>
-        </Layout>
-      </BrowserRouter>
-      {/* <Login /> */}
-    </div>
+        </Suspense>
+      </Layout>
+    </BrowserRouter>
   )
 }
 
-export default App  
+export default App
