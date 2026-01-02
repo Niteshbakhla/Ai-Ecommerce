@@ -3,14 +3,13 @@ import { store } from "../store/store";
 import { setCredentials, logout } from "../store/slices/authSlices";
 
 const API = axios.create({
-            baseURL: "http://localhost:4000/api", // KEEP YOUR URL
+            baseURL: import.meta.env.VITE_API_URL,
             withCredentials: true,
 });
 
 // Add access token to requests
 API.interceptors.request.use((config) => {
             const token = store.getState().auth.accessToken;
-            // console.log(token, "here it is ")
             if (token) config.headers.Authorization = `Bearer ${token}`;
             return config;
 });
