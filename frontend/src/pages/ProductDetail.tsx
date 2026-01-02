@@ -6,7 +6,7 @@ import { Heart, ShoppingCart, Truck, Shield, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { addToCartProduct } from "@/api/cart.services";
 import toast from "react-hot-toast";
-import { addOrUpdateReview, deleteReview } from "@/api/review.api";
+import { addOrUpdateReview } from "@/api/review.api";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store/store";
 import SimilarProducts from "@/components/common/SimilarProducts";
@@ -47,15 +47,6 @@ export default function ProductDetails() {
                         },
             });
 
-            // const {
-            //             data: reviews,
-            //             isLoading: reviewsLoading,
-            //             refetch: refetchReviews,
-            // } = useQuery({
-            //             queryKey: ["reviews", id],
-            //             queryFn: () => getReviews(id!),
-            // });
-
             const addReviewMutation = useMutation({
                         mutationFn: (formData: any) => addOrUpdateReview(id!, formData),
                         onSuccess: () => {
@@ -63,12 +54,12 @@ export default function ProductDetails() {
                         },
             });
 
-            const deleteReviewMutation = useMutation({
-                        mutationFn: (reviewId: string) => deleteReview(reviewId),
-                        onSuccess: () => {
-                                    queryClient.invalidateQueries({ queryKey: ["reviews", id] });
-                        },
-            });
+            // const deleteReviewMutation = useMutation({
+            //             mutationFn: (reviewId: string) => deleteReview(reviewId),
+            //             onSuccess: () => {
+            //                         queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+            //             },
+            // });
 
             if (productLoading) {
                         return (

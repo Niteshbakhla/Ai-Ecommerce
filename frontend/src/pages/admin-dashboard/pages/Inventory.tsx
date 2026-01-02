@@ -1,4 +1,3 @@
-import React from 'react';
 import { Badge } from "@/components/ui/badge";
 import { useAdminInventoryQuery } from "@/hooks/useAdminDashboard";
 import { Package, AlertCircle } from 'lucide-react';

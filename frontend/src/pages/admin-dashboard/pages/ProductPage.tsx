@@ -12,8 +12,8 @@ export default function Product() {
             const [showProductModal, setShowProductModal] = useState(false);
             const [searchQuery, setSearchQuery] = useState('');
             const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-            const [page, setPage] = useState(1);
-            const [search, setSearch] = useState("");
+            const [page] = useState(1);
+            const [search] = useState("");
             const queryClient = useQueryClient();
             const [productId, setProductId] = useState("");
 
@@ -64,7 +64,7 @@ export default function Product() {
                                     setShowProductModal(false)
                                     queryClient.invalidateQueries({ queryKey: ["products"] });
                         },
-                        onError: (error) => {
+                        onError: () => {
                                     toast.error("Failed to update product");
                         },
             });

@@ -1,5 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/api/product.api";
 import ProductCard from "@/components/common/ProductCard";
 import { useState } from "react";
 import SearchBar from "@/components/common/SearchBar";
@@ -14,11 +12,6 @@ export default function Home() {
             const [page, setPage] = useState(1);
             const [search, setSearch] = useState("");
             const [debouncedSearch] = useDebounce(search, 300);
-
-            // const { data, isLoading, isError, isFetching } = useQuery({
-            //             queryKey: ["products", page, debouncedSearch],
-            //             queryFn: () => getProducts(page, debouncedSearch),
-            // });
 
             const { data, isLoading, isError, isFetching } = useProducts(page, debouncedSearch);
 
