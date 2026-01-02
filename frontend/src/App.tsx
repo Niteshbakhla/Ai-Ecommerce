@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react"
 import Layout from "./components/layouts/Layout"
 import ProtectedRoute from "./protectedRoutes/ProtectedRoutes"
 import AdminLayout from "./components/layouts/AdminLayout"
+import PageLoader from "./components/common/PageLoader"
 
 // Public
 const Register = lazy(() => import("./pages/Register"))
@@ -27,7 +28,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Layout>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div><PageLoader /></div>}>
           <Routes>
 
             {/* Public */}
