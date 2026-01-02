@@ -45,10 +45,10 @@ export default function AdminLayout() {
             };
 
             return (
-                        <div className="flex h-[95vh] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                        <div className="flex h-[95vh] bg-linear-to-br from-gray-50 to-gray-100 overflow-hidden">
                                     {/* Sidebar */}
                                     <aside
-                                                className={`bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col shadow-2xl
+                                                className={`bg-linear-to-b from-slate-900 to-slate-800 text-white flex flex-col shadow-2xl
         transition-all duration-300 ease-in-out
         ${sidebarOpen ? 'w-72' : 'w-20'}`}
                                     >
@@ -87,11 +87,11 @@ export default function AdminLayout() {
                                                                                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl
                 transition-all duration-200 group relative
                 ${isActive
-                                                                                                                        ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
+                                                                                                                        ? 'bg-linear-to-r from-blue-600 to-blue-500 text-white shadow-lg shadow-blue-500/30'
                                                                                                                         : 'text-gray-300 hover:bg-slate-700/50 hover:text-white'
                                                                                                             }`}
                                                                                     >
-                                                                                                <Icon size={20} className="min-w-[20px] transition-transform group-hover:scale-110" />
+                                                                                                <Icon size={20} className="min-w-5 transition-transform group-hover:scale-110" />
 
                                                                                                 <span
                                                                                                             className={`font-medium transition-all duration-200 overflow-hidden whitespace-nowrap
@@ -114,7 +114,7 @@ export default function AdminLayout() {
                                                                         className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-slate-700/50 hover:text-white transition-all group"
                                                                         onClick={() => window.open('/', '_blank')}
                                                             >
-                                                                        <Globe size={20} className="min-w-[20px] transition-transform group-hover:scale-110" />
+                                                                        <Globe size={20} className="min-w-5 transition-transform group-hover:scale-110" />
                                                                         <span
                                                                                     className={`font-medium transition-all duration-200 overflow-hidden whitespace-nowrap
               ${sidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}
@@ -160,7 +160,7 @@ export default function AdminLayout() {
                                                                                                                         onClick={() => setShowUserMenu(!showUserMenu)}
                                                                                                                         className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors"
                                                                                                             >
-                                                                                                                        <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
+                                                                                                                        <div className="w-9 h-9 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
                                                                                                                                     {user.name?.charAt(0).toUpperCase() || 'U'}
                                                                                                                         </div>
                                                                                                                         <div className="hidden lg:block text-left">
