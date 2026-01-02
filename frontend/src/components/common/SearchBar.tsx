@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 type Props = {
@@ -30,7 +30,7 @@ export default function SearchBar({ setSearch }: Props) {
                                                                         }`}
                                                 />
 
-                                             
+
 
                                                 {/* Input */}
                                                 <Input
