@@ -100,8 +100,7 @@ export default function CartPage() {
 
 
             // Promo state
-            const [promoCode, setPromoCode] = useState("");
-            const [promoApplied, setPromoApplied] = useState(false);
+            const [promoApplied] = useState(false);
 
             if (isLoading) return <p>Loading cart...</p>;
 

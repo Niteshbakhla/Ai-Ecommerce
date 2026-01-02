@@ -9,9 +9,7 @@ import {
             Menu,
             X,
             NotebookPen,
-            LogOut,
             Bell,
-            Search,
             Settings,
             ChevronDown
 } from 'lucide-react';
@@ -21,7 +19,6 @@ import type { RootState } from '@/store/store';
 import { logout } from '@/store/slices/authSlices';
 
 export default function AdminLayout() {
-            const [activeTab, setActiveTab] = useState('dashboard');
             const [sidebarOpen, setSidebarOpen] = useState(true);
             const [showUserMenu, setShowUserMenu] = useState(false);
             const navigate = useNavigate();
@@ -85,7 +82,6 @@ export default function AdminLayout() {
                                                                                     <button
                                                                                                 key={item.id}
                                                                                                 onClick={() => {
-                                                                                                            setActiveTab(item.id);
                                                                                                             navigate(item.path);
                                                                                                 }}
                                                                                                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl
