@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Package, X, Plus, Search, Edit2, Trash2, Star, Image as ImageIcon } from 'lucide-react';
+import { Package, X, Plus, Search, Edit2, Trash2, Star, Image as ImageIcon, Loader2 } from 'lucide-react';
 import type { ProductFormData, Product, SimilarType } from '@/types/adminTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createProduct, deleteProduct, updateProduct } from '@/api/products';
@@ -170,7 +170,7 @@ export default function Product() {
                                                             {/* Products Grid */}
                                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                                                         {
-                                                                                    isPending ? <h1>Loading....</h1> :
+                                                                                    isPending ? <h1> <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" /> loading Products</h1> :
                                                                                                 data.map((product: SimilarType) => (
                                                                                                             <div key={product._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                                                                                                                         {/* Product Image */}
