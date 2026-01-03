@@ -1,4 +1,5 @@
 import { useAdminSalesQuery } from '@/hooks/useAdminDashboard';
+import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
@@ -33,7 +34,16 @@ const AnalyticsPage: React.FC = () => {
   }));
 
 
-  if (isLoading) return <h1>Loading....</h1>
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-gray-600 text-lg">Loading analytics...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
