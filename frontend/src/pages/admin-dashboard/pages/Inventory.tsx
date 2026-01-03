@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { useAdminInventoryQuery } from "@/hooks/useAdminDashboard";
-import { Package, AlertCircle } from 'lucide-react';
+import { Package, AlertCircle, Loader2 } from 'lucide-react';
 
 interface Product {
             _id: string;
@@ -15,7 +15,7 @@ export default function AdminInventory() {
                         return (
                                     <div className="flex items-center justify-center min-h-screen">
                                                 <div className="flex flex-col items-center gap-3">
-                                                            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                                                            <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
                                                             <p className="text-gray-600">Loading inventory...</p>
                                                 </div>
                                     </div>
