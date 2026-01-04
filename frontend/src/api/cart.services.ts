@@ -3,7 +3,6 @@ import API from "@/api/axiosInstance";
 
 export const addToCartProduct = async (productId: string) => {
             const { data } = await API.post(`/cart`, { productId });
-            console.log(data)
             return data;
 }
 
