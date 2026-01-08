@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart,Trash2 } from "lucide-react";
+import { Heart, Loader2, Trash2, ShoppingCart, Star } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -53,7 +53,6 @@ export default function ProductCard({ product }: Props) {
                         onSuccess(data) {
                                     toast.success(data.message);
                                     queryClient.invalidateQueries({ queryKey: ["cart"] });
-
                         },
             });
 
@@ -67,46 +66,54 @@ export default function ProductCard({ product }: Props) {
             })
 
             return (
-                        <Card className="group relative overflow-hidden border-0 bg-gray-50 hover:bg-white transition-all duration-300 ">
+                        <Card className="group relative overflow-hidden border-2 border-border bg-card hover:border-primary hover:shadow-xl transition-all duration-300 rounded-2xl">
 
                                     {/* Wishlist Button */}
                                     <button
                                                 onClick={() => setIsWishlisted(!isWishlisted)}
-                                                className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-card/90 backdrop-blur-sm border-2 border-border opacity-0 group-hover:opacity-100 transition-all hover:scale-110 hover:border-primary shadow-md"
                                     >
                                                 <Heart
-                                                            className={`h-5 w-5 transition-colors ${isWishlisted ? "fill-red-500 text-red-500" : "text-gray-400 hover:text-gray-600"
+                                                            className={`h-4 w-4 transition-colors ${isWishlisted
+                                                                                    ? "fill-destructive text-destructive"
+                                                                                    : "text-muted-foreground hover:text-destructive"
                                                                         }`}
                                                 />
                                     </button>
 
                                     {/* Product Image */}
                                     <button onClick={() => navigate(`/product/${product._id}`)} className="block w-full cursor-pointer">
-                                                <div className="aspect-square overflow-hidden bg-white">
+                                                <div className="aspect-square overflow-hidden bg-linear-to-br from-muted to-card relative">
                                                             <img
                                                                         src={product.images?.[0]}
                                                                         alt={product.title}
-                                                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                                        className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-110 p-4"
                                                             />
+                                                            {/* Overlay on hover */}
+                                                            <div className="absolute inset-0 bg-linear-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                                 </div>
                                     </button>
 
                                     {/* Content */}
-                                    <CardContent className="p-4 space-y-2 ">
-                                                <button className="text-left w-full">
-                                                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2 group-hover:text-gray-600 transition-colors">
+                                    <CardContent className="p-5 space-y-3">
+                                                <button
+                                                            onClick={() => navigate(`/product/${product._id}`)}
+                                                            className="text-left w-full"
+                                                >
+                                                            <h3 className="text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors leading-relaxed">
                                                                         {product.title}
                                                             </h3>
                                                 </button>
 
                                                 <div className="flex items-center justify-between">
-                                                            <p className="text-lg font-semibold text-gray-900">
+                                                            <p className="text-xl font-bold text-primary">
                                                                         ₹{product.price.toLocaleString()}
                                                             </p>
 
                                                             {product.ratingsAverage && (
-                                                                        <span className="text-xs text-gray-500">
-                                                                                    ★ {product.ratingsAverage.toFixed(1)}
+                                                                        <span className="flex items-center gap-1 text-xs font-semibold text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+                                                                                    <Star className="h-3 w-3 fill-chart-4 text-chart-4" />
+                                                                                    {product.ratingsAverage.toFixed(1)}
                                                                         </span>
                                                             )}
                                                 </div>
@@ -118,10 +125,11 @@ export default function ProductCard({ product }: Props) {
                                                                         {/* Go to Cart */}
                                                                         <Button
                                                                                     onClick={() => navigate("/cart")}
-                                                                                    className="flex-1 bg-gray-700 text-white hover:bg-gray-800"
+                                                                                    className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-md hover:shadow-lg transition-all  rounded-xl"
                                                                                     size="sm"
                                                                         >
-                                                                                    Go to cart
+                                                                                    <ShoppingCart className="h-4 w-4 mr-2" />
+                                                                                    Go to Cart
                                                                         </Button>
 
                                                                         {/* Small Delete Button */}
@@ -129,18 +137,27 @@ export default function ProductCard({ product }: Props) {
                                                                                     onClick={() => removeCartMutation.mutate(product._id)}
                                                                                     variant="outline"
                                                                                     size="icon"
-                                                                                    className="h-8 w-8 p-0 border-gray-300 hover:bg-red-50 hover:text-red-600"
+                                                                                    className="h-9 w-9 p-0 border-2 border-border hover:bg-red-50 hover:text-destructive hover:border-destructive rounded-xl transition-all hover:scale-110"
                                                                         >
-                                                                                    <Trash2 />
+                                                                                    {removeCartMutation.isPending ? (
+                                                                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                                                    ) : (
+                                                                                                <Trash2 className="h-4 w-4" />
+                                                                                    )}
                                                                         </Button>
                                                             </div>
                                                 ) : (
                                                             <Button
                                                                         onClick={() => userCartMutate.mutate(product._id)}
-                                                                        className="w-full bg-gray-900 text-white hover:bg-gray-800"
+                                                                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold shadow-md hover:shadow-lg transition-all  rounded-xl"
                                                                         size="sm"
                                                             >
-                                                                        Add to Cart
+                                                                        {userCartMutate.isPending ? (
+                                                                                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                                                                        ) : (
+                                                                                    <ShoppingCart className="h-4 w-4 mr-2" />
+                                                                        )}
+                                                                        {userCartMutate.isPending ? "Adding..." : "Add to Cart"}
                                                             </Button>
                                                 )}
 
