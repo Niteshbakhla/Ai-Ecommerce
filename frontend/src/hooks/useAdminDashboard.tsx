@@ -53,7 +53,7 @@ export const useAdminCustomersQuery = () =>
                         },
             });
 
-export const useProducts = (page: number, search: string) => {
+export const useProducts = (page: number = 1, search: string = "") => {
             return useQuery({
                         queryKey: ["products", page, search],
                         queryFn: () => getProducts(page, search),
