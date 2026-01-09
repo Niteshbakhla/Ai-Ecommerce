@@ -27,8 +27,8 @@ const AdminInventory = lazy(() => import("./pages/admin-dashboard/pages/Inventor
 const App = () => {
   return (
     <BrowserRouter>
-      <Layout>
-        <Suspense fallback={<div><PageLoader /></div>}>
+      <Suspense fallback={<div><PageLoader /></div>}>
+        <Layout>
           <Routes>
 
             {/* Public */}
@@ -56,8 +56,8 @@ const App = () => {
             </Route>
 
           </Routes>
-        </Suspense>
-      </Layout>
+        </Layout>
+      </Suspense>
     </BrowserRouter>
   )
 }
