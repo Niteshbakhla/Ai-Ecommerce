@@ -140,7 +140,7 @@ export default function Product() {
 
 
             return (
-                        <div className="flex h-screen bg-gray-50">
+                        <div className="flex h-[70vh] bg-gray-50">
                                     {/* Main Content */}
                                     <main className="flex-1 overflow-auto">
 
@@ -172,11 +172,11 @@ export default function Product() {
                                                                         {
                                                                                     isPending ? <h1> <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" /> loading Products</h1> :
                                                                                                 data.map((product: SimilarType) => (
-                                                                                                            <div key={product._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                                                                                                            <div key={product._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden o  hover:shadow-md transition-shadow">
                                                                                                                         {/* Product Image */}
                                                                                                                         <div className="h-48 bg-gray-100 flex items-center justify-center relative">
                                                                                                                                     {product.images.length > 0 ? (
-                                                                                                                                                <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover" />
+                                                                                                                                                <img src={product.images[0]} alt={product.title} className="w-full h-full object-contain" />
                                                                                                                                     ) : (
                                                                                                                                                 <ImageIcon size={48} className="text-gray-300" />
                                                                                                                                     )}
