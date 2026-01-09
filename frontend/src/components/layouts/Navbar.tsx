@@ -135,7 +135,7 @@ export default function Navbar({
                                                                         >
                                                                                     <ShoppingCart className="h-5 w-5 text-foreground group-hover:scale-110 transition-transform" />
                                                                                     {cartCount > 0 && (
-                                                                                                <span className="absolute -top-1 -right-1 bg-linear-to-br from-destructive to-red-700 text-destructive-foreground text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg animate-in zoom-in ring-2 ring-card">
+                                                                                                <span className="absolute -top-1 -right-1 bg-linear-to-br from-destructive to-red-700 text-white text-destructive-foreground text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg animate-in zoom-in ring-2 ring-card">
                                                                                                             {cartCount > 9 ? "9+" : cartCount}
                                                                                                 </span>
                                                                                     )}
