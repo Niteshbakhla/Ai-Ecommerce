@@ -1,8 +1,8 @@
 import ProductCard from "@/components/common/ProductCard";
 import { useState } from "react";
-import SearchBar from "@/components/common/SearchBar";
 import { useDebounce } from "use-debounce";
 import { useProducts } from "@/hooks/useAdminDashboard";
+import { useSearch } from "@/SearchContext";
 
 
 
@@ -10,15 +10,14 @@ import { useProducts } from "@/hooks/useAdminDashboard";
 
 export default function Home() {
             const [page, setPage] = useState(1);
-            const [search, setSearch] = useState("");
+            const { search } = useSearch();
             const [debouncedSearch] = useDebounce(search, 300);
 
             const { data, isLoading, isError, isFetching } = useProducts(page, debouncedSearch);
 
 
             return (
-                        <div>
-                                    <SearchBar setSearch={setSearch} />
+                        <div >
 
                                     {isLoading && (
                                                 <p className="text-center mt-10">Loading products...</p>
@@ -29,7 +28,7 @@ export default function Home() {
                                     )}
 
                                     {!isLoading && !isError && (
-                                                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-8">
                                                             {data?.map((p: any) => (
                                                                         <ProductCard key={p._id} product={p} />
                                                             ))}
