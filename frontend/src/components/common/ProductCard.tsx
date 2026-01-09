@@ -137,7 +137,7 @@ export default function ProductCard({ product }: Props) {
                                                                                     onClick={() => removeCartMutation.mutate(product._id)}
                                                                                     variant="outline"
                                                                                     size="icon"
-                                                                                    className="h-9 w-9 p-0 border-2 border-border hover:bg-red-50 hover:text-destructive hover:border-destructive rounded-xl transition-all hover:scale-110"
+                                                                                    className="h-9 w-9 p-0 border-2 border-border hover:bg-red-50 hover:text-destructive hover:border-destructive rounded-xl transition-all "
                                                                         >
                                                                                     {removeCartMutation.isPending ? (
                                                                                                 <Loader2 className="h-4 w-4 animate-spin" />
