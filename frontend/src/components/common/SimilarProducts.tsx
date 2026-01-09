@@ -8,7 +8,7 @@ type SimilarProductsProps = {
 
 
 const SimilarProducts = ({ similar }: SimilarProductsProps) => {
-            console.log(similar)
+          
             const navigate = useNavigate();
             return (
                         <div className="mt-16">
@@ -26,7 +26,7 @@ const SimilarProducts = ({ similar }: SimilarProductsProps) => {
                                                                                     <img
                                                                                                 src={p.images[0]}
                                                                                                 alt={p.title}
-                                                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                                                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                                                                                     />
                                                                         </div>
                                                                         <div className="p-4 space-y-2">
