@@ -213,7 +213,7 @@ export default function CustomerManagement() {
                                                                                                             <tr key={customer._id} className="hover:bg-gray-50 transition-colors">
                                                                                                                         <td className="px-6 py-4">
                                                                                                                                     <div className="flex items-center gap-3">
-                                                                                                                                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                                                                                                                                <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                                                                                                                                                             {customer.user.name.charAt(0).toUpperCase()}
                                                                                                                                                 </div>
                                                                                                                                                 <div>
