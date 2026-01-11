@@ -71,11 +71,11 @@ It supports secure authentication, product browsing, cart & checkout flow, **Raz
 
 ## 📸 Screenshots
 
-![HOME SCREENSHOT](./frontend/assests/home_page.png)
-[CART SCREENSHOT](./frontend/assests/cart_page.png)
-[CHECKOUT SCREENSHOT](./frontend/assests/checkout_page.png)
-[ADMIN SCREENSHOT](./frontend/assests/admin_panel.png) 
-[SALES SCREENSHOT](./frontend/assests/admin_analytics_page.png)
+![HOME SCREENSHOT](./frontend/assets/home_page.png)
+[CART SCREENSHOT](./frontend/assets/cart_page.png)
+[CHECKOUT SCREENSHOT](./frontend/assets/checkout_page.png)
+[ADMIN SCREENSHOT](./frontend/assets/admin_panel.png) 
+[SALES SCREENSHOT](./frontend/assets/admin_analytics_page.png)
 
 ---
 
