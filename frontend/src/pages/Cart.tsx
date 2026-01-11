@@ -184,15 +184,15 @@ export default function CartPage() {
                                                             {/* Cart Items */}
                                                             <div className="lg:col-span-2 space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
                                                                         {cartItems.map((item: any) => (
-                                                                                    <div key={item._id} className="bg-card rounded-2xl p-6 border-2 border-border hover:border-primary transition-all duration-300 hover:shadow-lg group">
 
+                                                                                    <div key={item._id} className="bg-card rounded-2xl p-6 border-2 border-border hover:border-primary transition-all duration-300 hover:shadow-lg group">
                                                                                                 <div className="flex gap-6">
 
                                                                                                             {/* Product Image */}
-                                                                                                            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-card border-2 border-border group-hover:border-primary transition-all">
+                                                                                                            <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-2xl overflow-hidden  bg-gradient-to-br from-muted to-card border-2 border-border  transition-all">
                                                                                                                         <img
-                                                                                                                                    src={item.productId?.image}
-                                                                                                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                                                                                                    src={item.productId?.images[0]}
+                                                                                                                                    className="w-full h-full object-contain  transition-transform duration-300"
                                                                                                                                     alt={item.productId?.title}
                                                                                                                         />
                                                                                                             </div>
